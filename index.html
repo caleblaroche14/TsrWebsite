@@ -65,15 +65,15 @@
                 <path style="fill:#d3d7cf"
                     d="m116.99 287.21c-17.153-0.91447-26.607-1.8949-36.071-3.7409-7.4499-1.4531-13.629-3.5131-15.667-5.223-1.086-0.91127-1.1796-1.1682-1.3743-3.7728l-0.20892-2.795 2.4643 1.2438c1.3554 0.68412 3.8263 1.6694 5.491 2.1895 4.4263 1.3829 14.411 3.2961 20.723 3.9709 1.0804 0.11548 2.5268 0.27199 3.2143 0.3478 3.3176 0.3658 13.694 1.2242 14.464 1.1965 0.39286-0.0141 4.4313 0.15882 8.9744 0.38428 6.4155 0.31839 41.41 0.32216 45.49 0.005 0.29464-0.0229 3.4286-0.19954 6.9643-0.39252 9.4138-0.51378 20.141-1.6399 25.179-2.6431 0.49108-0.0978 1.7513-0.27104 2.8005-0.38497 4.544-0.49346 16.842-4.2219 16.842-5.106 0-0.13629 0.32143-0.27202 0.71429-0.30162 0.65454-0.0493 0.71428 0.16636 0.71428 2.5782 0 2.4658-0.062 2.6757-0.98214 3.3227-6.4383 4.5272-23.307 7.5587-50.089 9.0016-5.7754 0.31116-44.308 0.40393-49.643 0.11953z"/>
             </svg>
-            
-            <!-- Terminal overlay (hidden until power on) -->
-            <div class="terminal-overlay hidden" id="terminal">
-                <div class="terminal-content" id="output"></div>
-                <div class="input-line">
-                    <span class="prompt">C:\TSR&gt;</span>
-                    <input type="text" id="command-input" class="command-input" autocomplete="off" spellcheck="false">
-                    <span class="cursor"></span>
-                </div>
+        </div>
+        
+        <!-- Terminal overlay (hidden until power on) - OUTSIDE wrapper for mobile -->
+        <div class="terminal-overlay hidden" id="terminal">
+            <div class="terminal-content" id="output"></div>
+            <div class="input-line">
+                <span class="prompt">C:\TSR&gt;</span>
+                <input type="text" id="command-input" class="command-input" autocomplete="off" spellcheck="false">
+                <span class="cursor"></span>
             </div>
         </div>
     </div>
@@ -143,6 +143,11 @@
                 // Show terminal
                 terminal.classList.remove('hidden');
                 
+                // Go fullscreen on mobile
+                if (window.innerWidth <= 768) {
+                    document.body.classList.add('mobile-fullscreen');
+                }
+                
                 // Run boot sequence
                 if (typeof runBootSequence === 'function') {
                     runBootSequence();
@@ -174,6 +179,9 @@
                 
                 // Hide terminal
                 terminal.classList.add('hidden');
+                
+                // Exit fullscreen on mobile
+                document.body.classList.remove('mobile-fullscreen');
                 
                 // Clear terminal output
                 document.getElementById('output').innerHTML = '';

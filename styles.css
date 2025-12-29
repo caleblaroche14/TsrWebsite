@@ -55,18 +55,35 @@ html, body {
     fill: #333 !important;
 }
 
-/* Terminal overlay positioned over the SVG screen area */
+/* Terminal overlay - positioned relative to container */
 .terminal-overlay {
     position: absolute;
-    top: 9.6%;
-    left: 10.2%;
-    width: 80.1%;
-    height: 58.7%;
     background: #000;
     border-radius: 8px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    z-index: 5;
+}
+
+/* Desktop positioning - align terminal over computer screen */
+@media (min-width: 769px) {
+    .container {
+        position: relative;
+    }
+    
+    .terminal-overlay {
+        /* Computer wrapper: height 135vh, margin-top -12vh, aspect-ratio ~0.976 */
+        /* Screen position: top 9.6%, left 10.2%, width 80.1%, height 58.7% of computer */
+        --computer-height: 135vh;
+        --computer-top: -12vh;
+        --computer-width: calc(var(--computer-height) * 0.9764);
+        
+        top: calc(var(--computer-top) + var(--computer-height) * 0.096);
+        left: calc(50% - var(--computer-width) / 2 + var(--computer-width) * 0.102);
+        width: calc(var(--computer-width) * 0.801);
+        height: calc(var(--computer-height) * 0.587);
+    }
 }
 
 /* CRT screen effects */
@@ -437,54 +454,116 @@ html, body {
     to { opacity: 1; }
 }
 
-/* Mobile responsive - ensure power button visible */
+/* Mobile responsive - computer visible, fullscreen terminal after power on */
 @media (max-width: 768px) {
-    .computer-wrapper {
-        height: 100vh;
-        margin-top: 0;
-        width: 100%;
-    }
-    
     .container {
         align-items: center;
+        padding: 10px;
+        position: relative;
+    }
+    
+    .computer-wrapper {
+        height: auto;
+        width: 100%;
+        max-width: 100%;
+        margin-top: 0;
+        aspect-ratio: 282.33 / 289.03;
+    }
+    
+    #dos-computer {
+        position: relative;
+    }
+    
+    /* Terminal hidden by default on mobile - shows as fullscreen when powered on */
+    .terminal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+        z-index: 100;
     }
     
     .terminal-content {
-        font-size: 14px !important;
-        padding: 10px;
+        font-size: 16px !important;
+        padding: 12px;
     }
     
     .prompt, .command-input {
-        font-size: 14px !important;
+        font-size: 16px !important;
+    }
+    
+    .input-line {
+        padding: 8px 12px;
+        min-height: 44px;
     }
     
     .output-line.ascii-art {
-        font-size: 7px !important;
+        font-size: 8px !important;
+        line-height: 1.0;
+    }
+    
+    .cursor {
+        width: 10px;
+        height: 18px;
+    }
+    
+    /* Fullscreen terminal mode on mobile - hide computer */
+    body.mobile-fullscreen .computer-wrapper {
+        display: none;
+    }
+    
+    body.mobile-fullscreen .prompt,
+    body.mobile-fullscreen .command-input {
+        font-size: 16px !important;
+    }
+    
+    body.mobile-fullscreen .output-line.ascii-art {
+        font-size: 8px !important;
     }
 }
 
 @media (max-width: 480px) {
-    .computer-wrapper {
-        height: 92vh;
-        margin-top: 1vh;
+    .container {
+        padding: 5px;
     }
     
     .terminal-content {
-        font-size: 12px !important;
-        padding: 6px;
+        font-size: 11px !important;
+        padding: 5px;
     }
     
     .prompt, .command-input {
-        font-size: 12px !important;
+        font-size: 11px !important;
+    }
+    
+    .input-line {
+        padding: 4px 5px;
+        min-height: 24px;
     }
     
     .output-line.ascii-art {
-        font-size: 5px !important;
-        line-height: 1.1;
+        font-size: 4px !important;
+        line-height: 0.9;
     }
     
     .cursor {
-        width: 8px;
-        height: 14px;
+        width: 6px;
+        height: 12px;
+    }
+    
+    body.mobile-fullscreen .terminal-content {
+        font-size: 14px !important;
+        padding: 10px;
+    }
+    
+    body.mobile-fullscreen .prompt,
+    body.mobile-fullscreen .command-input {
+        font-size: 14px !important;
+    }
+    
+    body.mobile-fullscreen .output-line.ascii-art {
+        font-size: 6px !important;
     }
 }
