@@ -73,11 +73,17 @@ const commands = [
         }
         
         let directoryLen = currentDir['id'].split('/').length;
-        console.log(currentDir['id'].split('/'));
         SetCurrentDirectory(currentDir['id'].split('/').splice(0, directoryLen - 1).join('/'));
         return;
       }
 
+      // check if directory exists
+      if (!currentDir.children || !currentDir.children[args[0].toUpperCase()]) {
+        return `The system cannot find the path specified: ${args[0]}`;
+      }
+      if (currentDir.children[args[0].toUpperCase()]['type'] !== 'directory') {
+        return `${args[0]} is not a directory.`;
+      }
       SetCurrentDirectory(currentDir.children[args[0].toUpperCase()]['id']);
       
     }
@@ -111,7 +117,6 @@ function GetCurrentDirectory(){
 
 function SetCurrentDirectory(newDir){
   let directory = document.getElementById("directory");
-  // Normalize stored path to use backslashes for display
   if (typeof newDir === 'string') {
     dir = newDir.replace(/\//g, '\\');
   } else {
