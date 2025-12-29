@@ -1,0 +1,48 @@
+{
+  "boot": [
+    {
+      "text": "TSR BIOS v1.0 (C) 2024 Terminate and Stay Resident",
+      "delay": 50
+    },
+    {
+      "text": "Memory Test: 640K Base Memory OK",
+      "delay": 100
+    },
+    {
+      "text": "Extended Memory: 1337K OK",
+      "delay": 100
+    },
+    {
+      "text": "",
+      "delay": 50
+    },
+    {
+      "text": "Detecting Hardware...",
+      "delay": 200
+    },
+    {
+      "text": "  Sound Blaster 16 Detected at Port 944",
+      "delay": 100
+    },
+    {
+      "text": "  CD-ROM Drive: TSR-2000",
+      "delay": 100
+    },
+    {
+      "text": "",
+      "delay": 50
+    },
+    {
+      "text": "Loading TSR.SYS...",
+      "delay": 300
+    },
+    {
+      "text": "TERMINATE AND STAY RESIDENT loaded.",
+      "delay": 100
+    },
+    {
+      "text": "",
+      "delay": 50
+    }
+  ]
+}

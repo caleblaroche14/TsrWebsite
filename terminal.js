@@ -1,67 +1,59 @@
 // Terminate and Stay Resident - DOS Terminal Emulator
 // =====================================================
 
-// Band data - Replace with actual data
-const BAND_DATA = {
+// Data loading from external files
+let BAND_INFO = {};
+let BAND_MEMBERS = [];
+let BAND_ALBUMS = [];
+let BOOT_SEQUENCE_DATA = [];
+let SOCIALS_DATA = [];
+
+// Load all data files
+async function loadDataFiles() {
+    try {
+        const [bandInfoRes, membersRes, albumsRes, bootRes, socialsRes] = await Promise.all([
+            fetch('data/bandInfo.json'),
+            fetch('data/members.json'),
+            fetch('data/albums.json'),
+            fetch('data/bootSequence.json'),
+            fetch('data/socials.json')
+        ]);
+
+        const bandInfoData = await bandInfoRes.json();
+        const membersData = await membersRes.json();
+        const albumsData = await albumsRes.json();
+        const bootData = await bootRes.json();
+        const socialsData = await socialsRes.json();
+
+        BAND_INFO = bandInfoData.band;
+        BAND_MEMBERS = membersData.members;
+        BAND_ALBUMS = albumsData.albums;
+        BOOT_SEQUENCE_DATA = bootData.boot;
+        SOCIALS_DATA = socialsData.socials;
+
+        console.log('All data files loaded successfully');
+    } catch (e) {
+        console.error('Error loading data files:', e);
+    }
+}
+
+// Create BAND_DATA object for backward compatibility
+function getBandData() {
+    return {
+        ...BAND_INFO,
+        members: BAND_MEMBERS,
+        albums: BAND_ALBUMS
+    };
+}
+
+// Legacy reference - will be populated after data loads
+let BAND_DATA = {
     name: "Terminate and Stay Resident",
     shortName: "TSR",
     formed: "2024",
     genre: "Electronic / Synthwave / Chiptune",
-    members: [
-        { name: "Artist 1", role: "Synths / Programming", bio: "Founder and primary composer." },
-        { name: "Artist 2", role: "Guitars / Bass", bio: "Bringing the heavy riffs." },
-        { name: "Artist 3", role: "Drums / Percussion", bio: "Keeping the beat alive." }
-    ],
-    albums: [
-        {
-            id: "carrierwave",
-            title: "CARRIER WAVE",
-            year: "2024",
-            artwork: "assets/tsr1_cover_v2.png",
-            tracks: [
-                { id: 1, title: "Dreaming", duration: "3:30", file: "assets/music/albums/CarrierWave/944_Dreaming_Mastered.mp3" },
-                { id: 2, title: "Encounter", duration: "3:45", file: "assets/music/albums/CarrierWave/944_Encounter_Mastered.mp3" },
-                { id: 3, title: "Engage", duration: "4:00", file: "assets/music/albums/CarrierWave/944_Engage_Mastered.mp3" },
-                { id: 4, title: "June", duration: "3:30", file: "assets/music/albums/CarrierWave/944_June_Mastered.mp3" },
-                { id: 5, title: "Letting Go", duration: "4:15", file: "assets/music/albums/CarrierWave/944_LettingGo_Mastered.mp3" },
-                { id: 6, title: "Light Speed", duration: "3:45", file: "assets/music/albums/CarrierWave/944_LightSpeed_Mastered.mp3" },
-                { id: 7, title: "Locked In", duration: "4:00", file: "assets/music/albums/CarrierWave/944_LockedIn_Mastered.mp3" },
-                { id: 8, title: "Pilot", duration: "3:30", file: "assets/music/albums/CarrierWave/944_Pilot_Mastered.mp3" },
-                { id: 9, title: "Ride", duration: "4:00", file: "assets/music/albums/CarrierWave/944_Ride_Mastered.mp3" },
-                { id: 10, title: "Skyline", duration: "3:45", file: "assets/music/albums/CarrierWave/944_Skyline_Mastered.mp3" },
-                { id: 11, title: "Soul", duration: "4:30", file: "assets/music/albums/CarrierWave/944_Soul_Mastered.mp3" },
-                { id: 12, title: "Stray", duration: "3:30", file: "assets/music/albums/CarrierWave/944_Stray_Mastered.mp3" },
-                { id: 13, title: "Transmission", duration: "4:00", file: "assets/music/albums/CarrierWave/944_Transmission_Mastered.mp3" },
-                { id: 14, title: "Two Three", duration: "3:45", file: "assets/music/albums/CarrierWave/944_TwoThree_Mastered.mp3" },
-                { id: 15, title: "Waiting", duration: "4:15", file: "assets/music/albums/CarrierWave/944_Waiting_Mastered.mp3" }
-            ]
-        }
-    ],
-    lore: `
-In the digital wasteland of 2024, where streaming algorithms dictate 
-what the masses consume, a signal emerged from the depths of conventional 
-memory. TERMINATE AND STAY RESIDENT was born - not as a mere band, but 
-as a resistance movement encoded in synthesizer waves.
-
-Like the TSR programs of old DOS systems, they remain resident in 
-memory, always running in the background, waiting to be called upon. 
-Their music is a callback to an era when computers spoke in beeps and 
-boops, when loading a game meant patience, and when the command line 
-was king.
-
-The founding members discovered each other through a series of encrypted 
-BBS messages, drawn together by a shared vision: to resurrect the sounds 
-of vintage computing and merge them with modern production techniques.
-
-Their mission is clear: Interrupt the mundane. Overflow the senses. 
-And never, ever terminate.
-
->>> SYSTEM INTERRUPT (2024) marked their emergence into the digital realm
->>> RESIDENT IN MEMORY (2025) solidified their presence in the scene
->>> More transmissions are being prepared...
-
-Stay resident. Stay vigilant. The next interrupt is coming.
-    `
+    members: [],
+    albums: []
 };
 
 // ASCII Art
@@ -74,19 +66,8 @@ const ASCII_LOGO = `
     ╚═╝   ╚══════╝╚═╝  ╚═╝
 `;
 
-const BOOT_SEQUENCE = [
-    { text: "TSR BIOS v1.0 (C) 2024 Terminate and Stay Resident", delay: 50 },
-    { text: "Memory Test: 640K Base Memory OK", delay: 100 },
-    { text: "Extended Memory: 1337K OK", delay: 100 },
-    { text: "", delay: 50 },
-    { text: "Detecting Hardware...", delay: 200 },
-    { text: "  Sound Blaster 16 Detected at Port 220", delay: 100 },
-    { text: "  CD-ROM Drive: TSR-2000", delay: 100 },
-    { text: "", delay: 50 },
-    { text: "Loading TSR.SYS...", delay: 300 },
-    { text: "TERMINATE AND STAY RESIDENT loaded.", delay: 100 },
-    { text: "", delay: 50 }
-];
+// BOOT_SEQUENCE will be loaded from data/bootSequence.json
+// This is populated after loadDataFiles() is called
 
 const WELCOME_MESSAGE = `
 ████████╗███████╗██████╗ 
@@ -114,15 +95,20 @@ const COMMANDS = {
         usage: "help [command]",
         execute: (args) => showHelp(args)
     },
-    lore: {
-        description: "Read the band's story",
-        usage: "lore",
-        execute: () => showLore()
-    },
     band: {
         description: "View band/artist info",
         usage: "band | band <member#>",
         execute: (args) => showBandInfo(args)
+    },
+    emaillist: {
+        description: "Add your email to the mailing list",
+        usage: "emaillist <email> [name]",
+        execute: (args, rawArgs) => emailListCommand(args, rawArgs)
+    },
+    setnetlify: {
+        description: "Configure Netlify form (url name [token])",
+        usage: "setnetlify <url> <form-name> [token]",
+        execute: (args) => setNetlify(args)
     },
     clear: {
         description: "Clear the terminal",
@@ -250,7 +236,7 @@ const COMMANDS = {
 const VFS = {
     root: {
         subdirs: ['ALBUMS'],
-        files: ['README.TXT', 'LORE.TXT', 'BAND.DAT', 'CONFIG.SYS', 'AUTOEXEC.BAT', 'ARTWORK.JPG']
+        files: ['README.TXT', 'BAND.DAT', 'CONFIG.SYS', 'AUTOEXEC.BAT', 'ARTWORK.JPG']
     },
     'ALBUMS': {
         subdirs: ['CARRIERWAVE'],
@@ -265,6 +251,16 @@ const VFS = {
 };
 
 let currentDir = 'root';
+
+// In-memory file contents store (path -> text)
+const FILE_CONTENTS = {};
+
+// Netlify form configuration (optional) - set these from your page or console when ready:
+// window.NETLIFY_FORM_URL = 'https://your-site.netlify.app/';        // your site URL (Netlify will accept form POSTs to your site root)
+// window.NETLIFY_FORM_NAME = 'tsr-email-list';                        // the 'form-name' used when building the Netlify form
+// Optional token (for your serverless protection):
+// window.NETLIFY_FORM_TOKEN = 'your-secret';                          // will be POSTed as 'token' field (optional)
+// If no endpoint is configured or submission fails, submissions will be saved locally to EMAILLIST_PENDING.TXT (append mode).
 
 // State
 let currentAlbum = null;
@@ -385,7 +381,13 @@ function updatePromptUI() {
 }
 
 // Initialize
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // Load all data files first
+    await loadDataFiles();
+    
+    // Update BAND_DATA with loaded data
+    BAND_DATA = getBandData();
+    
     output = document.getElementById('output');
     commandInput = document.getElementById('command-input');
     promptText = document.getElementById('prompt-text');
@@ -418,8 +420,8 @@ async function runBootSequence() {
     if (hasBooted) return;
     hasBooted = true;
 
-    // Run boot sequence
-    for (const line of BOOT_SEQUENCE) {
+    // Run boot sequence using loaded data
+    for (const line of BOOT_SEQUENCE_DATA) {
         await sleep(line.delay);
         printTo(output, line.text);
         scrollToBottom(output);
@@ -482,12 +484,13 @@ function processCommand(commandStr, output) {
     const prompt = getPrompt();
     printTo(output, `${prompt}${commandStr}`, 'command');
     
-    const parts = commandStr.toLowerCase().split(/\s+/);
-    const cmd = parts[0];
-    const args = parts.slice(1);
+    const tokens = commandStr.split(/\s+/);
+    const cmd = tokens[0].toLowerCase();
+    const args = tokens.slice(1);
+    const rawArgsStr = commandStr.includes(' ') ? commandStr.slice(commandStr.indexOf(' ') + 1) : '';
 
     if (COMMANDS[cmd]) {
-        const result = COMMANDS[cmd].execute(args);
+        const result = COMMANDS[cmd].execute(args, rawArgsStr);
         if (result) {
             printTo(output, result);
         }
@@ -531,13 +534,14 @@ function showHelp(args) {
         const cmdList = [
             ['HELP', 'Show this help'],
             ['PLAYER', 'Launch audio player'],
-            ['LORE', 'Band story/lore'],
             ['BAND', 'Band member info'],
+            ['EMAILLIST', 'Submit email to mailing list'],
+            ['SETNETLIFY', 'Configure Netlify form'],
             ['SOCIAL', 'Social links'],
             ['OPEN', 'Open a file'],
             ['TIME', 'Show system time'],
             ['DATE', 'Show system date'],
-            ['ECHO', 'Display text'],
+            ['ECHO', 'Display text (supports > / >> to write files)'],
             ['TYPE', 'View file contents'],
             ['CD', 'Change directory'],
             ['PWD', 'Working directory'],
@@ -796,15 +800,6 @@ function showArtwork(args) {
     printToAll('Click anywhere or [CLOSE] to dismiss.\n', 'info');
 }
 
-function showLore() {
-    printToAll('');
-    printToAll('+====================================================+');
-    printToAll('|              THE TSR CHRONICLES                    |');
-    printToAll('+====================================================+');
-    printToAll(BAND_DATA.lore);
-    printToAll('======================================================');
-    printToAll('');
-}
 
 function showBandInfo(args) {
     if (args.length > 0) {
@@ -836,6 +831,110 @@ function showBandInfo(args) {
     printToAll('+--------------------------------------+');
     printToAll('');
     printToAll('Type BAND <number> for detailed info.', 'info');
+    printToAll('');
+}
+
+function emailListCommand(args, rawArgs) {
+    printToAll('');
+    if (args.length === 0) {
+        printToAll('Usage: EMAILLIST <email> [name]');
+        printToAll('Example: EMAILLIST you@example.com John Doe');
+        printToAll('');
+        return;
+    }
+
+    const email = args[0];
+    const name = args.slice(1).join(' ');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+        printToAll('Invalid email address. Please provide a valid email.', 'error');
+        printToAll('');
+        return;
+    }
+
+    const entry = `${email}${name ? ' | ' + name : ''}`;
+
+    // Preferred: Netlify form endpoint
+    if (window.NETLIFY_FORM_URL && window.NETLIFY_FORM_NAME) {
+        const url = window.NETLIFY_FORM_URL;
+        printToAll('Submitting your email to the Netlify form...', 'info');
+
+        // Build form payload expected by Netlify (include form-name)
+        const form = new URLSearchParams();
+        form.append('form-name', window.NETLIFY_FORM_NAME);
+        form.append('email', email);
+        if (name) form.append('name', name);
+        if (window.NETLIFY_FORM_TOKEN) form.append('token', window.NETLIFY_FORM_TOKEN);
+
+        // Try a CORS-enabled form POST first
+        fetch(url, { method: 'POST', body: form, mode: 'cors' })
+            .then(res => {
+                if (res.ok) {
+                    printToAll('Thank you! Your email has been submitted.', 'success');
+                    printToAll('');
+                } else {
+                    // Fallback to no-cors form POST (can't inspect response)
+                    return fetch(url, { method: 'POST', body: form, mode: 'no-cors' })
+                        .then(() => {
+                            printToAll('Submitted (no-cors fallback; could not verify response).', 'info');
+                            printToAll('');
+                        });
+                }
+            })
+            .catch(e => {
+                console.error('Netlify submission error', e);
+                // final attempt using no-cors fallback
+                fetch(url, { method: 'POST', body: form, mode: 'no-cors' })
+                    .then(() => {
+                        printToAll('Submitted (no-cors fallback; could not verify response).', 'info');
+                        printToAll('');
+                    })
+                    .catch(err2 => {
+                        console.error('Fallback submission failed', err2);
+                        printToAll('Submission failed. Saving your email locally for manual upload.', 'error');
+                        writeFile('emaillist_pending.txt', entry + '\n', true);
+                        printToAll('');
+                    });
+            });
+
+        return;
+    }
+
+
+
+    // No endpoint configured — save locally
+    printToAll('No form configured; saving your email locally.', 'info');
+    writeFile('emaillist_pending.txt', entry + '\n', true);
+    printToAll('');
+}
+
+function setNetlify(args) {
+    if (args.length === 0) {
+        printToAll('Usage: SETNETLIFY <url> <form-name> [token]');
+        printToAll('Example: SETNETLIFY https://your-site.netlify.app/ tsr-email-list my-secret-token');
+        printToAll('');
+        return;
+    }
+
+    const url = args[0];
+    const formName = args[1] || '';
+    const token = args[2] || '';
+
+    if (!formName) {
+        printToAll('Missing <form-name>. You must provide the Netlify form-name.', 'error');
+        printToAll('');
+        return;
+    }
+
+    window.NETLIFY_FORM_URL = url;
+    window.NETLIFY_FORM_NAME = formName;
+    if (token) window.NETLIFY_FORM_TOKEN = token;
+
+    printToAll('Netlify form configured:');
+    printToAll(`  URL: ${url}`);
+    printToAll(`  form-name: ${formName}`);
+    if (token) printToAll('  token: set');
     printToAll('');
 }
 
@@ -917,7 +1016,6 @@ function showDirectory() {
     printToAll('..           <DIR>        12-28-24  12:00a');
     printToAll('ALBUMS       <DIR>        12-28-24  12:00a');
     printToAll('TRACKS       <DIR>        12-28-24  12:00a');
-    printToAll('LORE     TXT     4,096    12-28-24  12:00a');
     printToAll('BAND     DAT     2,048    12-28-24  12:00a');
     printToAll('SOCIAL   LNK     1,024    12-28-24  12:00a');
     printToAll('README   TXT       512    12-28-24  12:00a');
@@ -931,20 +1029,16 @@ function showSocial() {
     printToAll('+--------------------------------------+');
     printToAll('|          CONNECT WITH TSR            |');
     printToAll('+--------------------------------------+');
-    printToAll('|  [1] Bandcamp                        |');
-    printToAll('|      bandcamp.com/tsr                |');
-    printToAll('|                                      |');
-    printToAll('|  [2] Spotify                         |');
-    printToAll('|      spotify.com/artist/tsr          |');
-    printToAll('|                                      |');
-    printToAll('|  [3] Instagram                       |');
-    printToAll('|      @terminatestayresident          |');
-    printToAll('|                                      |');
-    printToAll('|  [4] Twitter/X                       |');
-    printToAll('|      @TSR_band                       |');
-    printToAll('|                                      |');
-    printToAll('|  [5] Email                           |');
-    printToAll('|      contact@tsr-band.com            |');
+    
+    SOCIALS_DATA.forEach((social) => {
+        const paddedName = social.name.padEnd(20);
+        printToAll(`|  ${social.icon} ${paddedName}        |`);
+        printToAll(`|      ${social.url.padEnd(30)}|`);
+        if (social !== SOCIALS_DATA[SOCIALS_DATA.length - 1]) {
+            printToAll('|                                      |');
+        }
+    });
+    
     printToAll('+--------------------------------------+');
     printToAll('');
 }
@@ -988,18 +1082,33 @@ function showDate() {
     printToAll('');
 }
 
-function echoText(args) {
-    if (args.length === 0) {
+function echoText(args, rawArgs) {
+    // Preserve rawArgs for exact text and redirection parsing
+    const text = rawArgs ? rawArgs : args.join(' ');
+    if (!text) {
         printToAll('');
         return;
     }
-    printToAll(args.join(' '));
+
+    // Check for redirection: '>' overwrite or '>>' append
+    const match = text.match(/^(.*?)(?:\s*)(>>?)\s*(\S+)$/);
+    if (match) {
+        const content = match[1].trim();
+        const op = match[2]; // '>' or '>>'
+        const filename = match[3];
+        // Write to file in current directory
+        writeFile(filename, content + '\n', op === '>>');
+        printToAll('');
+        printToAll(`File ${op === '>' ? 'written' : 'appended'}: ${filename}`, 'info');
+        printToAll('');
+    } else {
+        printToAll(text);
+    }
 }
 
 function typeFile(args) {
     const files = {
         'readme.txt': 'Terminate and Stay Resident - DOS Music Interface\n\nType HELP for commands.',
-        'lore.txt': BAND_DATA.lore,
         'band.dat': 'Band member information - use BAND command',
         'config.sys': 'DEVICE=HIMEM.SYS\nDEVICE=EMM386.EXE',
         'autoexec.bat': '@ECHO OFF\nCLS\nTYPE WELCOME.TXT'
@@ -1012,14 +1121,25 @@ function typeFile(args) {
         return;
     }
 
-    const filename = args[0].toLowerCase();
-    if (files[filename]) {
+    const filename = args[0];
+    const filenameLower = filename.toLowerCase();
+    const pathKey = getCurrentPath() + '\\' + filename.toUpperCase();
+
+    // Check for user-created files first
+    if (FILE_CONTENTS[pathKey]) {
         printToAll('');
-        printToAll(files[filename]);
+        printToAll(FILE_CONTENTS[pathKey]);
+        printToAll('');
+        return;
+    }
+
+    if (files[filenameLower]) {
+        printToAll('');
+        printToAll(files[filenameLower]);
         printToAll('');
     } else {
         printToAll('');
-        printToAll(`File not found - ${filename}`);
+        printToAll(`File not found - ${filenameLower}`);
         printToAll('');
     }
 }
@@ -1141,12 +1261,39 @@ function deleteFile(args) {
     
     if (VFS[currentDir].files.includes(fileName)) {
         VFS[currentDir].files = VFS[currentDir].files.filter(f => f !== fileName);
+        // Remove any stored file contents for this path
+        const pathKey = getCurrentPath() + '\\' + fileName;
+        if (FILE_CONTENTS[pathKey]) {
+            delete FILE_CONTENTS[pathKey];
+        }
         printToAll(`File deleted: ${fileName}`);
     } else {
         printToAll(`File not found: ${fileName}`);
     }
     
     printToAll('');
+}
+
+function writeFile(filename, content, append = false) {
+    if (!filename) {
+        printToAll('Missing filename.');
+        return;
+    }
+    const name = filename.toUpperCase();
+    const fileNameFinal = name.includes('.') ? name : (name + '.TXT');
+    const pathKey = getCurrentPath() + '\\' + fileNameFinal;
+
+    // Add to VFS if not present
+    if (!VFS[currentDir].files.includes(fileNameFinal)) {
+        VFS[currentDir].files.push(fileNameFinal);
+    }
+
+    if (!append) {
+        FILE_CONTENTS[pathKey] = content;
+    } else {
+        FILE_CONTENTS[pathKey] = (FILE_CONTENTS[pathKey] || '') + content;
+    }
+    printToAll(`File saved: ${fileNameFinal}`, 'info');
 }
 
 function copyFile(args) {
@@ -1287,7 +1434,6 @@ function openFile(args) {
         // Display text file
         const files = {
             'README.TXT': 'Terminate and Stay Resident - DOS Music Interface\n\nType HELP for commands.',
-            'LORE.TXT': BAND_DATA.lore,
             'BAND.DAT': 'Band member information:\n\n' + BAND_DATA.members.map(m => `${m.name} - ${m.role}\n${m.bio}`).join('\n\n')
         };
         
@@ -1510,7 +1656,7 @@ function renderPlayerUI() {
     // Audio visualizer - render right after volume
     updateVisualizerData();
     if (isPlaying) {
-        const barCount = 16;
+        const barCount = 32;
         
         // Create visualizer container once, then just update bar heights
         if (!visualizerContainer) {
