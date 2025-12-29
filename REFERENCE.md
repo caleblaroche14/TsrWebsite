@@ -372,6 +372,24 @@ Update in two places:
 1. `BAND_DATA.albums[0].artwork = "path/to/image.png"`
 2. `getImagePath()` function to map filenames
 
+### Netlify Function / Email Collection Proxy
+
+You can deploy a small Netlify Function to accept POST requests from the terminal and forward them to your Netlify form. This avoids CORS issues when testing on localhost and provides a controllable backend endpoint.
+
+- Place function in `netlify/functions/submit-email.js` (example provided in the repo). The function expects env vars:
+  - `TARGET_URL` (e.g. `https://tsrwebsite.netlify.app/`)
+  - `FORM_NAME` (e.g. `tsr-email-list`)
+  - `FUNCTION_SECRET` (optional)
+
+- Deploy to Netlify and set environment variables in the Site → Settings → Build & deploy → Environment.
+- The function will be available at `https://<your-site>/.netlify/functions/submit-email`.
+- Configure the terminal to use the function by running:
+  - `SETNETLIFYFUNC https://<your-site>/.netlify/functions/submit-email <token>` (token optional)
+
+- The `EMAILLIST` command will attempt the function first, then fallback to a direct Netlify form POST (no-cors) if the function or direct post fails.
+
+This gives you reliable submissions and an inspected JSON response the terminal can use to confirm success.
+
 ### Styling Changes
 
 All CSS in `styles.css`. Key sections:

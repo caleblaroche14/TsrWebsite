@@ -110,6 +110,16 @@ const COMMANDS = {
         usage: "setnetlify <url> <form-name> [token]",
         execute: (args) => setNetlify(args)
     },
+    setnetlifyfunc: {
+        description: "Configure Netlify function URL (url [token])",
+        usage: "setnetlifyfunc <function-url> [token]",
+        execute: (args) => setNetlifyFunc(args)
+    },
+    pushpending: {
+        description: "Attempt to send pending saved email entries",
+        usage: "pushpending",
+        execute: () => pushPending()
+    },
     clear: {
         description: "Clear the terminal",
         usage: "clear | cls",
@@ -537,6 +547,8 @@ function showHelp(args) {
             ['BAND', 'Band member info'],
             ['EMAILLIST', 'Submit email to mailing list'],
             ['SETNETLIFY', 'Configure Netlify form'],
+            ['SETNETLIFYFUNC', 'Configure Netlify function URL'],
+            ['PUSHPENDING', 'Attempt to send pending saved entries'],
             ['SOCIAL', 'Social links'],
             ['OPEN', 'Open a file'],
             ['TIME', 'Show system time'],
@@ -855,6 +867,70 @@ function emailListCommand(args, rawArgs) {
 
     const entry = `${email}${name ? ' | ' + name : ''}`;
 
+    // Preferred: Netlify Function endpoint (proxy)
+    if (window.NETLIFY_FUNCTION_URL) {
+        const funcUrl = window.NETLIFY_FUNCTION_URL;
+        printToAll('Submitting your email to the Netlify function...', 'info');
+        const payload = { email, name };
+        if (window.NETLIFY_FORM_TOKEN) payload.token = window.NETLIFY_FORM_TOKEN;
+
+        fetch(funcUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            mode: 'cors'
+        })
+        .then(async res => {
+            let json = null;
+            try { json = await res.json(); } catch (e) { json = null; }
+            if (res.ok && json && json.ok) {
+                printToAll('Thank you! Your email has been submitted.', 'success');
+                printToAll('');
+                return;
+            }
+
+            // If not ok, try Netlify direct fallback if configured
+            if (window.NETLIFY_FORM_URL && window.NETLIFY_FORM_NAME) {
+                printToAll('Function did not accept submission; falling back to direct Netlify form...', 'info');
+                // build form and let the previous logic handle it
+            } else {
+                throw new Error('Function submission failed: ' + (json?.error || res.status));
+            }
+        })
+        .catch(e => {
+            console.error('Netlify function submission error', e);
+
+            // Fallback: try direct Netlify form if configured
+            if (window.NETLIFY_FORM_URL && window.NETLIFY_FORM_NAME) {
+                const url = window.NETLIFY_FORM_URL;
+                const form = new URLSearchParams();
+                form.append('form-name', window.NETLIFY_FORM_NAME);
+                form.append('email', email);
+                if (name) form.append('name', name);
+                if (window.NETLIFY_FORM_TOKEN) form.append('token', window.NETLIFY_FORM_TOKEN);
+
+                fetch(url, { method: 'POST', body: form, mode: 'no-cors' })
+                    .then(() => {
+                        printToAll('Submitted (direct no-cors fallback; could not verify response).', 'info');
+                        printToAll('');
+                    })
+                    .catch(err2 => {
+                        console.error('Fallback direct submission failed', err2);
+                        printToAll('Submission failed. Saving your email locally for manual upload.', 'error');
+                        writeFile('emaillist_pending.txt', entry + '\n', true);
+                        printToAll('');
+                    });
+            } else {
+                // No fallback configured — store locally
+                writeFile('emaillist_pending.txt', entry + '\n', true);
+                printToAll('Submission failed. Saved locally to EMAILLIST_PENDING.TXT', 'error');
+                printToAll('');
+            }
+        });
+
+        return;
+    }
+
     // Preferred: Netlify form endpoint
     if (window.NETLIFY_FORM_URL && window.NETLIFY_FORM_NAME) {
         const url = window.NETLIFY_FORM_URL;
@@ -935,6 +1011,75 @@ function setNetlify(args) {
     printToAll(`  URL: ${url}`);
     printToAll(`  form-name: ${formName}`);
     if (token) printToAll('  token: set');
+    printToAll('');
+}
+
+function setNetlifyFunc(args) {
+    if (args.length === 0) {
+        printToAll('Usage: SETNETLIFYFUNC <function-url> [token]');
+        printToAll('Example: SETNETLIFYFUNC https://your-site.netlify.app/.netlify/functions/submit-email my-secret-token');
+        printToAll('');
+        return;
+    }
+
+    const url = args[0];
+    const token = args[1] || '';
+
+    if (!/^https?:\/\//i.test(url)) {
+        printToAll('Please provide a valid URL starting with http:// or https://', 'error');
+        printToAll('');
+        return;
+    }
+
+    window.NETLIFY_FUNCTION_URL = url;
+    if (token) window.NETLIFY_FORM_TOKEN = token;
+
+    printToAll('Netlify function configured:');
+    printToAll(`  URL: ${url}`);
+    if (token) printToAll('  token: set');
+    printToAll('');
+}
+
+function pushPending() {
+    printToAll('Searching for pending emaillist files...');
+
+    // Find all FILE_CONTENTS keys that end with EMAILLIST_PENDING.TXT (case-insensitive)
+    const pendingKeys = Object.keys(FILE_CONTENTS).filter(k => k.toLowerCase().endsWith('\\emaillist_pending.txt'));
+
+    if (pendingKeys.length === 0) {
+        printToAll('No pending submissions found.');
+        printToAll('');
+        return;
+    }
+
+    let processed = 0;
+    for (const key of pendingKeys) {
+        const content = FILE_CONTENTS[key];
+        const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
+        // Attempt to submit each line
+        for (const line of lines) {
+            // Expect format: 'email | name' or 'email'
+            const parts = line.split('|').map(p => p.trim());
+            const email = parts[0];
+            const name = parts[1] || '';
+            printToAll(`Attempting: ${email} ${name}`);
+            // Call the main submission logic by invoking emailListCommand directly
+            // Supply args array similar to terminal input
+            emailListCommand([email, ...(name ? [name] : [])]);
+            processed++;
+        }
+        // After attempting, remove the pending file
+        delete FILE_CONTENTS[key];
+        // Also remove from VFS listing if present
+        const fileName = key.split('\\').pop();
+        const dirPath = key.split('\\').slice(0, -1).join('\\');
+        // Try to locate directory by matching getCurrentPath() strings - simpler: remove from all dirs
+        Object.keys(VFS).forEach(d => {
+            VFS[d].files = VFS[d].files.filter(f => f.toLowerCase() !== fileName.toLowerCase());
+        });
+    }
+
+    printToAll(`Processed ${processed} pending submissions (attempted).`);
     printToAll('');
 }
 
