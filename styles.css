@@ -95,11 +95,12 @@ html, body {
     right: 0;
     bottom: 0;
     background: 
+        /* Use faint light scanlines so they show up on pure black backgrounds */
         repeating-linear-gradient(
             0deg,
-            rgba(0, 0, 0, 0.3),
-            rgba(0, 0, 0, 0.3) 1px,
-            transparent 1px,
+            rgba(255, 255, 255, 0.02),
+            rgba(255, 255, 255, 0.02) 1px,
+            transparent 2px,
             transparent 2px
         ),
         radial-gradient(
@@ -129,9 +130,27 @@ html, body {
 }
 
 @keyframes flicker {
-    0% { opacity: 0.97; }
-    50% { opacity: 1; }
-    100% { opacity: 0.98; }
+    0% { opacity: 0.92; }
+    5% { opacity: 0.97; }
+    10% { opacity: 0.93; }
+    15% { opacity: 0.98; }
+    20% { opacity: 0.94; }
+    25% { opacity: 1; }
+    30% { opacity: 0.95; }
+    35% { opacity: 0.99; }
+    40% { opacity: 0.96; }
+    45% { opacity: 1; }
+    50% { opacity: 0.97; }
+    55% { opacity: 1; }
+    60% { opacity: 0.98; }
+    65% { opacity: 1; }
+    70% { opacity: 0.99; }
+    75% { opacity: 1; }
+    80% { opacity: 0.97; }
+    85% { opacity: 1; }
+    90% { opacity: 0.98; }
+    95% { opacity: 1; }
+    100% { opacity: 0.99; }
 }
 
 /* Terminal content */

@@ -345,13 +345,20 @@ function initAudioContext() {
 }
 
 function getWebAudioCurrentTime() {
-    if (!audioBufferSource || !webAudioStartTime) return 0;
-    
-    if (audioContext.state === 'running' && audioBufferSource && !webAudioPausedTime) {
+    // If we never started, return last known value
+    if (!webAudioStartTime) return webAudioCurrentTime || 0;
+
+    // If paused, return the cached current time
+    if (webAudioPausedTime) return webAudioCurrentTime || 0;
+
+    // Fall back if audioContext isn't available
+    if (!audioContext) return webAudioCurrentTime || 0;
+
+    if (audioContext.state === 'running') {
         webAudioCurrentTime = (audioContext.currentTime - webAudioStartTime);
     }
-    
-    return Math.min(webAudioCurrentTime, webAudioDuration);
+
+    return Math.min(webAudioCurrentTime, webAudioDuration || Infinity);
 }
 
 function updateVisualizerData() {
@@ -715,28 +722,51 @@ function togglePause() {
             audioBufferSource = audioContext.createBufferSource();
             audioBufferSource.buffer = audioBuffer;
             audioBufferSource.connect(gainNode);
-            
+
             audioBufferSource.onended = () => {
-                isPlaying = false;
-                isPaused = false;
-                hideNowPlaying();
+                // If we are paused, this onended was triggered by a manual stop for pause - keep paused state
+                if (!isPaused) {
+                    isPlaying = false;
+                    isPaused = false;
+                    audioBufferSource = null;
+                    hideNowPlaying();
+                    renderPlayerUI();
+                } else {
+                    audioBufferSource = null;
+                    renderPlayerUI();
+                }
             };
-            
+
+            // Clear paused timer and compute a new start offset
             webAudioStartTime = audioContext.currentTime - webAudioCurrentTime;
+            webAudioPausedTime = 0;
             audioBufferSource.start(0, webAudioCurrentTime);
+            isPlaying = true;
+            isPaused = false;
+            startPlayerRenderLoop();
+            renderPlayerUI();
         }
-        isPaused = false;
         printToAll('\n▶ Playback resumed.\n', 'success');
     } else {
         // Pause
-        webAudioPausedTime = audioContext.currentTime;
-        webAudioCurrentTime = getWebAudioCurrentTime();
+        // Compute current playback time BEFORE setting paused flag or stopping the source
+        if (audioContext && webAudioStartTime) {
+            webAudioCurrentTime = Math.min(audioContext.currentTime - webAudioStartTime, webAudioDuration);
+        } else {
+            webAudioCurrentTime = getWebAudioCurrentTime();
+        }
+
+        // Mark paused early so onended handler knows this was a manual stop
+        isPaused = true;
+        webAudioPausedTime = audioContext ? audioContext.currentTime : webAudioPausedTime;
+
         if (audioBufferSource) {
             try {
                 audioBufferSource.stop();
             } catch (e) {}
         }
-        isPaused = true;
+
+        isPlaying = false;
         printToAll('\n❚❚ Playback paused.\n', 'info');
     }
 }
@@ -1674,12 +1704,20 @@ function playPlayerTrack(trackIndex) {
             
             // Handle track end
             audioBufferSource.onended = () => {
-                isPlaying = false;
-                isPaused = false;
-                audioBufferSource = null;
-                isLoadingTrack = false;
-                hideNowPlaying();
-                renderPlayerUI();
+                // If we are paused, this onended was triggered by a manual stop for pause - keep paused state
+                if (!isPaused) {
+                    isPlaying = false;
+                    isPaused = false;
+                    audioBufferSource = null;
+                    isLoadingTrack = false;
+                    hideNowPlaying();
+                    renderPlayerUI();
+                } else {
+                    // Paused: clear the source but keep paused state so resume works correctly
+                    audioBufferSource = null;
+                    isLoadingTrack = false;
+                    renderPlayerUI();
+                }
             };
             
             // Start playback
