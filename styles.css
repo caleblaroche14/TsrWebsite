@@ -483,6 +483,32 @@ html, body {
         height: 100vh;
         border-radius: 0;
         z-index: 100;
+        display: flex;
+        flex-direction: column;
+        background: #000;
+    }
+    
+    /* Make sure terminal shows when not hidden */
+    .terminal-overlay:not(.hidden) {
+        display: flex !important;
+    }
+    
+    /* Fix input above keyboard on mobile */
+    .terminal-overlay .input-line {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 101;
+        background: #000;
+        border-top: 1px solid #333;
+        padding: 12px;
+        padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    }
+    
+    /* Add padding to terminal content so it doesn't get hidden behind fixed input */
+    .terminal-overlay .terminal-content {
+        padding-bottom: 70px;
     }
     
     .terminal-content {

@@ -197,6 +197,31 @@
         terminal.addEventListener('click', function() {
             document.getElementById('command-input').focus();
         });
+        
+        // Handle mobile keyboard - scroll input into view when focused
+        const cmdInput = document.getElementById('command-input');
+        cmdInput.addEventListener('focus', function() {
+            if (window.innerWidth <= 768) {
+                // Small delay to let keyboard open
+                setTimeout(() => {
+                    this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            }
+        });
+        
+        // Use visualViewport API if available for better keyboard handling
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', () => {
+                if (window.innerWidth <= 768) {
+                    const inputLine = document.querySelector('.input-line');
+                    if (inputLine) {
+                        // Adjust input position based on visual viewport
+                        const keyboardHeight = window.innerHeight - window.visualViewport.height;
+                        inputLine.style.bottom = keyboardHeight + 'px';
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>

@@ -193,6 +193,81 @@ const COMMANDS = {
         description: "Set playback volume",
         usage: "volume <0-100>",
         execute: (args) => setVolume(args)
+    },
+    time: {
+        description: "Display system time",
+        usage: "time",
+        execute: () => showTime()
+    },
+    date: {
+        description: "Display system date",
+        usage: "date",
+        execute: () => showDate()
+    },
+    echo: {
+        description: "Display text on screen",
+        usage: "echo <text>",
+        execute: (args) => echoText(args)
+    },
+    type: {
+        description: "Display file contents",
+        usage: "type <filename>",
+        execute: (args) => typeFile(args)
+    },
+    cd: {
+        description: "Change directory",
+        usage: "cd <path>",
+        execute: (args) => changeDir(args)
+    },
+    pwd: {
+        description: "Print working directory",
+        usage: "pwd",
+        execute: () => printWorkingDir()
+    },
+    md: {
+        description: "Make directory",
+        usage: "md <dirname>",
+        execute: (args) => makeDir(args)
+    },
+    rd: {
+        description: "Remove directory",
+        usage: "rd <dirname>",
+        execute: (args) => removeDir(args)
+    },
+    del: {
+        description: "Delete file",
+        usage: "del <filename>",
+        execute: (args) => deleteFile(args)
+    },
+    copy: {
+        description: "Copy file",
+        usage: "copy <source> <dest>",
+        execute: (args) => copyFile(args)
+    },
+    tree: {
+        description: "Display directory tree",
+        usage: "tree",
+        execute: () => showTree()
+    },
+    path: {
+        description: "Display system PATH",
+        usage: "path",
+        execute: () => showPath()
+    },
+    set: {
+        description: "Set environment variables",
+        usage: "set",
+        execute: (args) => setEnv(args)
+    },
+    cls: {
+        description: "Clear the screen",
+        usage: "cls",
+        execute: () => clearTerminal()
+    },
+    exit: {
+        description: "Exit the terminal",
+        usage: "exit",
+        execute: () => exitTerminal()
     }
 };
 
@@ -356,8 +431,22 @@ function showHelp(args) {
             ['LORE', 'Band story/lore'],
             ['BAND', 'Band member info'],
             ['SOCIAL', 'Social links'],
+            ['TIME', 'Show system time'],
+            ['DATE', 'Show system date'],
+            ['ECHO', 'Display text'],
+            ['TYPE', 'View file contents'],
+            ['CD', 'Change directory'],
+            ['PWD', 'Working directory'],
+            ['MD', 'Make directory'],
+            ['RD', 'Remove directory'],
+            ['DEL', 'Delete file'],
+            ['COPY', 'Copy file'],
+            ['TREE', 'Directory tree'],
+            ['PATH', 'System PATH'],
+            ['SET', 'Environment vars'],
             ['CLS', 'Clear screen'],
             ['DIR', 'Directory listing'],
+            ['EXIT', 'Exit terminal'],
             ['ABOUT', 'About this site'],
             ['VER', 'Version info']
         ];
@@ -742,3 +831,184 @@ document.addEventListener('click', (e) => {
         }
     }
 });
+
+// DOS Command Implementations
+
+function showTime() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    printToAll('');
+    printToAll(`Current time is ${hours}:${minutes}:${seconds}`);
+    printToAll('');
+}
+
+function showDate() {
+    const now = new Date();
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const month = months[now.getMonth()];
+    const day = now.getDate();
+    const year = now.getFullYear();
+    printToAll('');
+    printToAll(`Current date is ${month} ${day}, ${year}`);
+    printToAll('');
+}
+
+function echoText(args) {
+    if (args.length === 0) {
+        printToAll('');
+        return;
+    }
+    printToAll(args.join(' '));
+}
+
+function typeFile(args) {
+    const files = {
+        'readme.txt': 'Terminate and Stay Resident - DOS Music Interface\n\nType HELP for commands.',
+        'lore.txt': BAND_DATA.lore,
+        'band.dat': 'Band member information - use BAND command',
+        'config.sys': 'DEVICE=HIMEM.SYS\nDEVICE=EMM386.EXE',
+        'autoexec.bat': '@ECHO OFF\nCLS\nTYPE WELCOME.TXT'
+    };
+
+    if (args.length === 0) {
+        printToAll('');
+        printToAll('Missing filename.');
+        printToAll('');
+        return;
+    }
+
+    const filename = args[0].toLowerCase();
+    if (files[filename]) {
+        printToAll('');
+        printToAll(files[filename]);
+        printToAll('');
+    } else {
+        printToAll('');
+        printToAll(`File not found - ${filename}`);
+        printToAll('');
+    }
+}
+
+function changeDir(args) {
+    printToAll('');
+    if (args.length === 0 || args[0] === '\\') {
+        printToAll('You are in C:\\');
+    } else if (args[0] === '..') {
+        printToAll('You are in C:\\');
+    } else {
+        printToAll(`Changed to C:\\${args[0]}`);
+    }
+    printToAll('');
+}
+
+function printWorkingDir() {
+    printToAll('');
+    printToAll('C:\\TSR');
+    printToAll('');
+}
+
+function makeDir(args) {
+    if (args.length === 0) {
+        printToAll('');
+        printToAll('Missing directory name.');
+        printToAll('');
+        return;
+    }
+    printToAll('');
+    printToAll(`Directory created: ${args[0]}`);
+    printToAll('');
+}
+
+function removeDir(args) {
+    if (args.length === 0) {
+        printToAll('');
+        printToAll('Missing directory name.');
+        printToAll('');
+        return;
+    }
+    printToAll('');
+    printToAll(`Directory removed: ${args[0]}`);
+    printToAll('');
+}
+
+function deleteFile(args) {
+    if (args.length === 0) {
+        printToAll('');
+        printToAll('Missing filename.');
+        printToAll('');
+        return;
+    }
+    printToAll('');
+    printToAll(`File deleted: ${args[0]}`);
+    printToAll('');
+}
+
+function copyFile(args) {
+    if (args.length < 2) {
+        printToAll('');
+        printToAll('Usage: copy <source> <destination>');
+        printToAll('');
+        return;
+    }
+    printToAll('');
+    printToAll(`${args[0]}`);
+    printToAll(`1 file(s) copied.`);
+    printToAll('');
+}
+
+function showTree() {
+    printToAll('');
+    printToAll('C:\\TSR');
+    printToAll('├── ALBUMS');
+    printToAll('│   ├── CARRIERWAVE');
+    printToAll('│   │   ├── [1] DREAMING.MP3');
+    printToAll('│   │   ├── [2] ENCOUNTER.MP3');
+    printToAll('│   │   ├── [3] ENGAGE.MP3');
+    printToAll('│   │   ├── [4] JUNE.MP3');
+    printToAll('│   │   ├── [5] LETTING GO.MP3');
+    printToAll('│   │   ├── [6] LIGHT SPEED.MP3');
+    printToAll('│   │   ├── [7] LOCKED IN.MP3');
+    printToAll('│   │   ├── [8] PILOT.MP3');
+    printToAll('│   │   ├── [9] RIDE.MP3');
+    printToAll('│   │   ├── [10] SKYLINE.MP3');
+    printToAll('│   │   ├── [11] SOUL.MP3');
+    printToAll('│   │   ├── [12] STRAY.MP3');
+    printToAll('│   │   ├── [13] TRANSMISSION.MP3');
+    printToAll('│   │   ├── [14] TWO THREE.MP3');
+    printToAll('│   │   └── [15] WAITING.MP3');
+    printToAll('├── LORE.TXT');
+    printToAll('├── BAND.DAT');
+    printToAll('├── README.TXT');
+    printToAll('└── CONFIG.SYS');
+    printToAll('');
+}
+
+function showPath() {
+    printToAll('');
+    printToAll('PATH=C:\\;C:\\DOS;C:\\WINDOWS;C:\\TSR\\ALBUMS');
+    printToAll('');
+}
+
+function setEnv(args) {
+    if (args.length === 0) {
+        printToAll('');
+        printToAll('COMSPEC=C:\\COMMAND.COM');
+        printToAll('PATH=C:\\;C:\\DOS;C:\\TSR');
+        printToAll('PROMPT=$P$G');
+        printToAll('TSR_MUSIC=ENABLED');
+        printToAll('');
+    } else {
+        const setting = args.join('=');
+        printToAll('');
+        printToAll(`Environment variable set: ${setting}`);
+        printToAll('');
+    }
+}
+
+function exitTerminal() {
+    printToAll('');
+    printToAll('Exiting TSR DOS Interface...');
+    printToAll('');
+}
