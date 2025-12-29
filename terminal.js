@@ -17,7 +17,7 @@ const BAND_DATA = {
             id: "carrierwave",
             title: "CARRIER WAVE",
             year: "2024",
-            artwork: "assets/music/albums/CarrierWave/artwork.jpg",
+            artwork: "assets/tsr1_cover_v2.png",
             tracks: [
                 { id: 1, title: "Dreaming", duration: "3:30", file: "assets/music/albums/CarrierWave/944_Dreaming_Mastered.mp3" },
                 { id: 2, title: "Encounter", duration: "3:45", file: "assets/music/albums/CarrierWave/944_Encounter_Mastered.mp3" },
@@ -180,9 +180,9 @@ const COMMANDS = {
         execute: () => showAbout()
     },
     dir: {
-        description: "List available content",
+        description: "List directory contents",
         usage: "dir",
-        execute: () => showDirectory()
+        execute: () => listDir()
     },
     social: {
         description: "View social media links",
@@ -268,8 +268,33 @@ const COMMANDS = {
         description: "Exit the terminal",
         usage: "exit",
         execute: () => exitTerminal()
+    },
+    open: {
+        description: "Open a file",
+        usage: "open <filename>",
+        execute: (args) => openFile(args)
     }
 };
+
+// Virtual File System
+const VFS = {
+    root: {
+        subdirs: ['ALBUMS'],
+        files: ['README.TXT', 'LORE.TXT', 'BAND.DAT', 'CONFIG.SYS', 'AUTOEXEC.BAT', 'ARTWORK.JPG']
+    },
+    'ALBUMS': {
+        subdirs: ['CARRIERWAVE'],
+        files: [],
+        parent: 'root'
+    },
+    'CARRIERWAVE': {
+        subdirs: [],
+        files: ['ARTWORK.JPG', '944_DREAMING_MASTERED.MP3', '944_ENCOUNTER_MASTERED.MP3', '944_ENGAGE_MASTERED.MP3', '944_JUNE_MASTERED.MP3', '944_LETTINGGO_MASTERED.MP3', '944_LIGHTSPEED_MASTERED.MP3', '944_LOCKEDIN_MASTERED.MP3', '944_PILOT_MASTERED.MP3', '944_RIDE_MASTERED.MP3', '944_SKYLINE_MASTERED.MP3', '944_SOUL_MASTERED.MP3', '944_STRAY_MASTERED.MP3', '944_TRANSMISSION_MASTERED.MP3', '944_TWOTHREE_MASTERED.MP3', '944_WAITING_MASTERED.MP3'],
+        parent: 'ALBUMS'
+    }
+};
+
+let currentDir = 'root';
 
 // State
 let currentAlbum = null;
@@ -279,13 +304,23 @@ let commandHistory = [];
 let historyIndex = -1;
 
 // DOM Elements
-let output, commandInput;
+let output, commandInput, promptText;
 let audioPlayer;
+
+// Update prompt in UI
+function updatePromptUI() {
+    const promptEl = document.getElementById('prompt-text');
+    if (promptEl) {
+        const pathEscaped = getCurrentPath().replace(/\\/g, '\\');
+        promptEl.textContent = pathEscaped + '>';
+    }
+}
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     output = document.getElementById('output');
     commandInput = document.getElementById('command-input');
+    promptText = document.getElementById('prompt-text');
     audioPlayer = document.getElementById('audio-player');
 
     // Setup event listeners
@@ -369,7 +404,8 @@ function setupInput(input, outputEl) {
 }
 
 function processCommand(commandStr, output) {
-    printTo(output, `C:\\TSR>${commandStr}`, 'command');
+    const prompt = getPrompt();
+    printTo(output, `${prompt}${commandStr}`, 'command');
     
     const parts = commandStr.toLowerCase().split(/\s+/);
     const cmd = parts[0];
@@ -431,6 +467,7 @@ function showHelp(args) {
             ['LORE', 'Band story/lore'],
             ['BAND', 'Band member info'],
             ['SOCIAL', 'Social links'],
+            ['OPEN', 'Open a file'],
             ['TIME', 'Show system time'],
             ['DATE', 'Show system date'],
             ['ECHO', 'Display text'],
@@ -893,19 +930,49 @@ function typeFile(args) {
 
 function changeDir(args) {
     printToAll('');
+    
     if (args.length === 0 || args[0] === '\\') {
-        printToAll('You are in C:\\');
+        currentDir = 'root';
+        printToAll('C:\\TSR');
     } else if (args[0] === '..') {
-        printToAll('You are in C:\\');
+        if (VFS[currentDir].parent) {
+            currentDir = VFS[currentDir].parent;
+        }
+        printToAll(getCurrentPath());
     } else {
-        printToAll(`Changed to C:\\${args[0]}`);
+        const dirName = args[0].toUpperCase();
+        if (VFS[currentDir].subdirs.includes(dirName) && VFS[dirName]) {
+            currentDir = dirName;
+            printToAll(getCurrentPath());
+        } else {
+            printToAll(`Invalid directory: ${dirName}`);
+            printToAll('');
+            return;
+        }
     }
+    
+    updatePromptUI();
     printToAll('');
+}
+
+function getPrompt() {
+    return getCurrentPath() + '>';
+}
+
+function getCurrentPath() {
+    if (currentDir === 'root') return 'C:\\TSR';
+    let path = 'C:\\TSR';
+    let dir = currentDir;
+    while (dir && dir !== 'root') {
+        path += '\\' + dir;
+        dir = VFS[dir].parent;
+    }
+    return path;
 }
 
 function printWorkingDir() {
     printToAll('');
-    printToAll('C:\\TSR');
+    printToAll(getCurrentPath());
     printToAll('');
 }
 
@@ -916,8 +983,25 @@ function makeDir(args) {
         printToAll('');
         return;
     }
+    
+    const dirName = args[0].toUpperCase();
+    
     printToAll('');
-    printToAll(`Directory created: ${args[0]}`);
+    
+    // Check if directory already exists
+    if (VFS[dirName]) {
+        printToAll(`Directory ${dirName} already exists.`);
+    } else {
+        // Create new directory
+        VFS[dirName] = {
+            subdirs: [],
+            files: [],
+            parent: currentDir
+        };
+        VFS[currentDir].subdirs.push(dirName);
+        printToAll(`Directory created: ${dirName}`);
+    }
+    
     printToAll('');
 }
 
@@ -928,8 +1012,22 @@ function removeDir(args) {
         printToAll('');
         return;
     }
+    
+    const dirName = args[0].toUpperCase();
+    
     printToAll('');
-    printToAll(`Directory removed: ${args[0]}`);
+    
+    if (!VFS[dirName]) {
+        printToAll(`Directory not found: ${dirName}`);
+    } else if (VFS[dirName].subdirs.length > 0 || VFS[dirName].files.length > 0) {
+        printToAll(`Directory not empty: ${dirName}`);
+    } else {
+        // Remove directory
+        VFS[currentDir].subdirs = VFS[currentDir].subdirs.filter(d => d !== dirName);
+        delete VFS[dirName];
+        printToAll(`Directory removed: ${dirName}`);
+    }
+    
     printToAll('');
 }
 
@@ -940,8 +1038,18 @@ function deleteFile(args) {
         printToAll('');
         return;
     }
+    
+    const fileName = args[0].toUpperCase();
+    
     printToAll('');
-    printToAll(`File deleted: ${args[0]}`);
+    
+    if (VFS[currentDir].files.includes(fileName)) {
+        VFS[currentDir].files = VFS[currentDir].files.filter(f => f !== fileName);
+        printToAll(`File deleted: ${fileName}`);
+    } else {
+        printToAll(`File not found: ${fileName}`);
+    }
+    
     printToAll('');
 }
 
@@ -960,28 +1068,48 @@ function copyFile(args) {
 
 function showTree() {
     printToAll('');
+    
+    function buildTree(dirName, prefix = '') {
+        const dir = VFS[dirName];
+        if (!dir) return;
+        
+        // Show files
+        const totalItems = dir.subdirs.length + dir.files.length;
+        dir.subdirs.forEach((subdir, idx) => {
+            const isLast = idx === dir.subdirs.length - 1 && dir.files.length === 0;
+            printToAll(prefix + (isLast ? '└── ' : '├── ') + subdir);
+            const newPrefix = prefix + (isLast ? '    ' : '│   ');
+            buildTree(subdir, newPrefix);
+        });
+        
+        dir.files.forEach((file, idx) => {
+            const isLast = idx === dir.files.length - 1;
+            printToAll(prefix + (isLast ? '└── ' : '├── ') + file);
+        });
+    }
+    
     printToAll('C:\\TSR');
-    printToAll('├── ALBUMS');
-    printToAll('│   ├── CARRIERWAVE');
-    printToAll('│   │   ├── [1] DREAMING.MP3');
-    printToAll('│   │   ├── [2] ENCOUNTER.MP3');
-    printToAll('│   │   ├── [3] ENGAGE.MP3');
-    printToAll('│   │   ├── [4] JUNE.MP3');
-    printToAll('│   │   ├── [5] LETTING GO.MP3');
-    printToAll('│   │   ├── [6] LIGHT SPEED.MP3');
-    printToAll('│   │   ├── [7] LOCKED IN.MP3');
-    printToAll('│   │   ├── [8] PILOT.MP3');
-    printToAll('│   │   ├── [9] RIDE.MP3');
-    printToAll('│   │   ├── [10] SKYLINE.MP3');
-    printToAll('│   │   ├── [11] SOUL.MP3');
-    printToAll('│   │   ├── [12] STRAY.MP3');
-    printToAll('│   │   ├── [13] TRANSMISSION.MP3');
-    printToAll('│   │   ├── [14] TWO THREE.MP3');
-    printToAll('│   │   └── [15] WAITING.MP3');
-    printToAll('├── LORE.TXT');
-    printToAll('├── BAND.DAT');
-    printToAll('├── README.TXT');
-    printToAll('└── CONFIG.SYS');
+    buildTree('root', '');
+    printToAll('');
+}
+
+function listDir() {
+    const dir = VFS[currentDir];
+    printToAll('');
+    printToAll(`Directory listing: ${getCurrentPath()}`);
+    printToAll('');
+    
+    // Show subdirectories
+    dir.subdirs.forEach(subdir => {
+        const count = VFS[subdir].subdirs.length + VFS[subdir].files.length;
+        printToAll(`<DIR>  ${subdir}`);
+    });
+    
+    // Show files
+    dir.files.forEach(file => {
+        printToAll(`       ${file}`);
+    });
+    
     printToAll('');
 }
 
@@ -1011,4 +1139,94 @@ function exitTerminal() {
     printToAll('');
     printToAll('Exiting TSR DOS Interface...');
     printToAll('');
+}
+
+function openFile(args) {
+    if (args.length === 0) {
+        printToAll('');
+        printToAll('Missing filename.');
+        printToAll('');
+        return;
+    }
+    
+    const fileName = args[0].toUpperCase();
+    const currentDirObj = VFS[currentDir];
+    
+    printToAll('');
+    
+    // Check if file exists in current directory
+    if (!currentDirObj.files.includes(fileName)) {
+        printToAll(`File not found: ${fileName}`);
+        printToAll('');
+        return;
+    }
+    
+    // Handle different file types
+    if (fileName.endsWith('.JPG') || fileName.endsWith('.PNG')) {
+        // Display image
+        const imagePath = getImagePath(fileName);
+        printToAll(`Opening image: ${fileName}`);
+        printToAll('');
+        
+        // Create image element
+        const imgContainer = document.createElement('div');
+        imgContainer.style.cssText = 'text-align: center; margin: 10px 0; color: #54fc54;';
+        
+        const img = document.createElement('img');
+        img.src = imagePath;
+        img.alt = fileName;
+        img.style.cssText = 'max-width: 100%; max-height: 300px; border: 2px solid #54fc54; image-rendering: pixelated;';
+        
+        imgContainer.appendChild(img);
+        output.appendChild(imgContainer);
+        
+        const info = document.createElement('div');
+        info.className = 'output-line';
+        info.textContent = `[Image displayed: ${fileName}]`;
+        output.appendChild(info);
+        
+        printToAll('');
+        scrollToBottom(output);
+    } else if (fileName.endsWith('.TXT')) {
+        // Display text file
+        const files = {
+            'README.TXT': 'Terminate and Stay Resident - DOS Music Interface\n\nType HELP for commands.',
+            'LORE.TXT': BAND_DATA.lore,
+            'BAND.DAT': 'Band member information:\n\n' + BAND_DATA.members.map(m => `${m.name} - ${m.role}\n${m.bio}`).join('\n\n')
+        };
+        
+        if (files[fileName]) {
+            printToAll(`[${fileName}]`);
+            printToAll('');
+            printToAll(files[fileName]);
+            printToAll('');
+        } else {
+            printToAll(`Cannot read file: ${fileName}`);
+            printToAll('');
+        }
+    } else if (fileName.endsWith('.MP3')) {
+        // Play audio file
+        printToAll(`Opening audio: ${fileName}`);
+        const trackIndex = parseInt(fileName.match(/\d+/)?.[0]) || 0;
+        if (trackIndex > 0 && trackIndex <= BAND_DATA.albums[0].tracks.length) {
+            const track = BAND_DATA.albums[0].tracks[trackIndex - 1];
+            printToAll(`Track: ${track.title} (${track.duration})`);
+            playTrack([trackIndex.toString()]);
+        }
+        printToAll('');
+    } else {
+        printToAll(`Cannot open file type: ${fileName}`);
+        printToAll('');
+    }
+}
+
+function getImagePath(fileName) {
+    // Map filenames to their paths
+    const paths = {
+        'ARTWORK.JPG': 'assets/images/tsr1_cover_v2.png',
+        'ARTWORK.PNG': 'assets/images/tsr1_cover_v2.png',
+        'TSR1_COVER_V2.PNG': 'assets/images/tsr1_cover_v2.png'
+    };
+    
+    return paths[fileName] || 'assets/tsr1_cover_v2.png';
 }
