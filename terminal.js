@@ -114,36 +114,6 @@ const COMMANDS = {
         usage: "help [command]",
         execute: (args) => showHelp(args)
     },
-    play: {
-        description: "Play a song or album",
-        usage: "play <track#> | play album <album#>",
-        execute: (args) => playSong(args)
-    },
-    stop: {
-        description: "Stop current playback",
-        usage: "stop",
-        execute: () => stopPlayback()
-    },
-    pause: {
-        description: "Pause/resume playback",
-        usage: "pause",
-        execute: () => togglePause()
-    },
-    albums: {
-        description: "List all albums",
-        usage: "albums",
-        execute: () => listAlbums()
-    },
-    tracks: {
-        description: "List tracks from an album",
-        usage: "tracks <album#>",
-        execute: (args) => listTracks(args)
-    },
-    artwork: {
-        description: "View album artwork",
-        usage: "artwork <album#>",
-        execute: (args) => showArtwork(args)
-    },
     lore: {
         description: "Read the band's story",
         usage: "lore",
@@ -153,11 +123,6 @@ const COMMANDS = {
         description: "View band/artist info",
         usage: "band | band <member#>",
         execute: (args) => showBandInfo(args)
-    },
-    download: {
-        description: "Download a track or album",
-        usage: "download <track#> | download album <album#>",
-        execute: (args) => downloadContent(args)
     },
     clear: {
         description: "Clear the terminal",
@@ -273,6 +238,11 @@ const COMMANDS = {
         description: "Open a file",
         usage: "open <filename>",
         execute: (args) => openFile(args)
+    },
+    player: {
+        description: "Launch audio player",
+        usage: "player",
+        execute: () => launchPlayer()
     }
 };
 
@@ -306,6 +276,104 @@ let historyIndex = -1;
 // DOM Elements
 let output, commandInput, promptText;
 let audioPlayer;
+
+// Player state
+let playerMode = false;
+let selectedTrackIndex = 0;
+let playlistViewStart = 0;  // First visible song in the list
+const PLAYLIST_VISIBLE = 3; // Show 3 songs at a time
+
+// Web Audio API - Real audio visualization
+let audioContext = null;
+let analyser = null;
+let audioSource = null;
+let gainNode = null;
+let audioBuffer = null;
+let audioBufferSource = null;
+let playerRenderLoop = null;
+let visualizerData = new Uint8Array(32);
+
+// Cached visualizer elements
+let visualizerBars = [];
+let visualizerContainer = null;
+
+// Track playback state for Web Audio API
+let webAudioCurrentTime = 0;
+let isLoadingTrack = false; // Prevent multiple simultaneous track loads
+let audioFetchController = null; // Abort controller for fetch requests
+let webAudioDuration = 0;
+let webAudioStartTime = 0;
+let webAudioPausedTime = 0;
+
+function initAudioContext() {
+    if (audioContext) {
+        if (audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+        return;
+    }
+    
+    try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) {
+            console.warn('AudioContext not supported');
+            return;
+        }
+        
+        audioContext = new AudioContextClass();
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
+        analyser.connect(audioContext.destination);
+        
+        // Create gain node for volume control
+        gainNode = audioContext.createGain();
+        gainNode.connect(analyser);
+        gainNode.gain.value = 1.0;
+        
+        if (audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+    } catch (e) {
+        console.error('Failed to initialize audio context:', e);
+    }
+}
+
+function getWebAudioCurrentTime() {
+    if (!audioBufferSource || !webAudioStartTime) return 0;
+    
+    if (audioContext.state === 'running' && audioBufferSource && !webAudioPausedTime) {
+        webAudioCurrentTime = (audioContext.currentTime - webAudioStartTime);
+    }
+    
+    return Math.min(webAudioCurrentTime, webAudioDuration);
+}
+
+function updateVisualizerData() {
+    if (!analyser) {
+        visualizerData.fill(0);
+        return;
+    }
+    
+    try {
+        analyser.getByteFrequencyData(visualizerData);
+    } catch (e) {
+        visualizerData.fill(0);
+    }
+}
+
+function startPlayerRenderLoop() {
+    if (playerRenderLoop) return;
+    playerRenderLoop = setInterval(() => {
+        if (playerMode) {
+            renderPlayerUI();
+        } else {
+            if (playerRenderLoop) {
+                clearInterval(playerRenderLoop);
+                playerRenderLoop = null;
+            }
+        }
+    }, 30); // Update ~33 times per second
+}
 
 // Update prompt in UI
 function updatePromptUI() {
@@ -376,6 +444,13 @@ function sleep(ms) {
 
 function setupInput(input, outputEl) {
     input.addEventListener('keydown', (e) => {
+        // Handle player mode input
+        if (playerMode) {
+            handlePlayerInput(e);
+            return;
+        }
+        
+        // Normal command mode input
         if (e.key === 'Enter') {
             const command = input.value.trim();
             if (command) {
@@ -455,15 +530,7 @@ function showHelp(args) {
         
         const cmdList = [
             ['HELP', 'Show this help'],
-            ['ALBUMS', 'List all albums'],
-            ['TRACKS #', 'List album tracks'],
-            ['PLAY #', 'Play a track'],
-            ['PLAY ALBUM #', 'Play full album'],
-            ['STOP', 'Stop playback'],
-            ['PAUSE', 'Pause/resume'],
-            ['VOLUME #', 'Set volume (0-100)'],
-            ['ARTWORK #', 'View album art'],
-            ['DOWNLOAD #', 'Download track'],
+            ['PLAYER', 'Launch audio player'],
             ['LORE', 'Band story/lore'],
             ['BAND', 'Band member info'],
             ['SOCIAL', 'Social links'],
@@ -606,10 +673,16 @@ function playTrack(track, album) {
 }
 
 function stopPlayback() {
-    audioPlayer.pause();
-    audioPlayer.currentTime = 0;
+    if (audioBufferSource) {
+        try {
+            audioBufferSource.stop();
+        } catch (e) {}
+    }
     isPlaying = false;
     isPaused = false;
+    webAudioCurrentTime = 0;
+    webAudioStartTime = 0;
+    webAudioPausedTime = 0;
     hideNowPlaying();
     printToAll('\n■ Playback stopped.\n', 'info');
 }
@@ -621,11 +694,32 @@ function togglePause() {
     }
 
     if (isPaused) {
-        audioPlayer.play();
+        // Resume
+        if (audioBuffer && audioContext) {
+            audioBufferSource = audioContext.createBufferSource();
+            audioBufferSource.buffer = audioBuffer;
+            audioBufferSource.connect(gainNode);
+            
+            audioBufferSource.onended = () => {
+                isPlaying = false;
+                isPaused = false;
+                hideNowPlaying();
+            };
+            
+            webAudioStartTime = audioContext.currentTime - webAudioCurrentTime;
+            audioBufferSource.start(0, webAudioCurrentTime);
+        }
         isPaused = false;
         printToAll('\n▶ Playback resumed.\n', 'success');
     } else {
-        audioPlayer.pause();
+        // Pause
+        webAudioPausedTime = audioContext.currentTime;
+        webAudioCurrentTime = getWebAudioCurrentTime();
+        if (audioBufferSource) {
+            try {
+                audioBufferSource.stop();
+            } catch (e) {}
+        }
         isPaused = true;
         printToAll('\n❚❚ Playback paused.\n', 'info');
     }
@@ -637,7 +731,9 @@ function setVolume(args) {
         printToAll('Usage: volume <0-100>', 'error');
         return;
     }
-    audioPlayer.volume = vol / 100;
+    if (gainNode) {
+        gainNode.gain.value = vol / 100;
+    }
     const bar = '█'.repeat(Math.floor(vol / 10)) + '░'.repeat(10 - Math.floor(vol / 10));
     printToAll(`\nVolume: [${bar}] ${vol}%\n`, 'info');
 }
@@ -1223,10 +1319,357 @@ function openFile(args) {
 function getImagePath(fileName) {
     // Map filenames to their paths
     const paths = {
-        'ARTWORK.JPG': 'assets/images/tsr1_cover_v2.png',
-        'ARTWORK.PNG': 'assets/images/tsr1_cover_v2.png',
-        'TSR1_COVER_V2.PNG': 'assets/images/tsr1_cover_v2.png'
+        'ARTWORK.JPG': 'assets/tsr1_cover_v2.png',
+        'ARTWORK.PNG': 'assets/tsr1_cover_v2.png',
+        'TSR1_COVER_V2.PNG': 'assets/tsr1_cover_v2.png'
     };
     
     return paths[fileName] || 'assets/tsr1_cover_v2.png';
+}
+
+// ==================== AUDIO PLAYER ====================
+
+function playPlayerTrack(trackIndex) {
+    const tracks = BAND_DATA.albums[0].tracks;
+    const track = tracks[trackIndex];
+    
+    if (!track) return;
+    
+    // Prevent multiple simultaneous track loads
+    if (isLoadingTrack) return;
+    isLoadingTrack = true;
+    
+    // Abort any pending fetch
+    if (audioFetchController) {
+        audioFetchController.abort();
+    }
+    audioFetchController = new AbortController();
+    
+    // Initialize audio context
+    initAudioContext();
+    if (!audioContext) {
+        console.error('Audio context initialization failed');
+        isLoadingTrack = false;
+        return;
+    }
+    
+    // Stop any currently playing track completely
+    if (audioBufferSource) {
+        try {
+            audioBufferSource.stop();
+        } catch (e) {}
+        audioBufferSource = null;
+    }
+    
+    // Reset playback state
+    webAudioCurrentTime = 0;
+    webAudioStartTime = 0;
+    webAudioPausedTime = 0;
+    isPlaying = true;
+    isPaused = false;
+    
+    // Fetch and decode the audio file
+    fetch(track.file, { signal: audioFetchController.signal })
+        .then(response => response.arrayBuffer())
+        .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+        .then(buffer => {
+            audioBuffer = buffer;
+            webAudioDuration = buffer.duration;
+            
+            // Create buffer source
+            audioBufferSource = audioContext.createBufferSource();
+            audioBufferSource.buffer = buffer;
+            audioBufferSource.connect(gainNode);
+            
+            // Handle track end
+            audioBufferSource.onended = () => {
+                isPlaying = false;
+                isPaused = false;
+                audioBufferSource = null;
+                isLoadingTrack = false;
+                hideNowPlaying();
+                renderPlayerUI();
+            };
+            
+            // Start playback
+            webAudioStartTime = audioContext.currentTime;
+            audioBufferSource.start(0);
+            isLoadingTrack = false;
+            startPlayerRenderLoop();
+            
+            // Force initial render to show playing state
+            setTimeout(() => renderPlayerUI(), 50);
+        })
+        .catch(e => {
+            // Ignore aborted requests (user clicked another track)
+            if (e.name === 'AbortError') return;
+            
+            console.error('Error loading audio:', e);
+            isPlaying = false;
+            isLoadingTrack = false;
+            renderPlayerUI();
+        });
+}
+
+function launchPlayer() {
+    playerMode = true;
+    selectedTrackIndex = 0;
+    playlistViewStart = 0;
+    output.innerHTML = '';
+    printToAll('');
+    printToAll('┌──────────────────────────────────┐');
+    printToAll('│   TSR AUDIO PLAYER v1.0          │');
+    printToAll('├──────────────────────────────────┤');
+    renderPlayerUI();
+    startPlayerRenderLoop();
+}
+
+function renderPlayerUI() {
+    const tracks = BAND_DATA.albums[0].tracks;
+    const currentTime = getWebAudioCurrentTime();
+    const volumePercent = gainNode ? Math.round(gainNode.gain.value * 100) : 100;
+    const volumeBar = '█'.repeat(Math.round(volumePercent / 5)) + '░'.repeat(20 - Math.round(volumePercent / 5));
+    
+    // Adjust viewport so selected track is always visible
+    if (selectedTrackIndex < playlistViewStart) {
+        playlistViewStart = selectedTrackIndex;
+    } else if (selectedTrackIndex >= playlistViewStart + PLAYLIST_VISIBLE) {
+        playlistViewStart = selectedTrackIndex - PLAYLIST_VISIBLE + 1;
+    }
+    
+    // Clear old player UI and reset visualizer cache
+    output.innerHTML = '';
+    visualizerContainer = null;
+    visualizerBars = [];
+    
+    // Build all lines without scrolling
+    const lines = [];
+    lines.push('');
+    lines.push('┌──────────────────────────────────');
+    lines.push('│   TSR AUDIO PLAYER v1.0');
+    lines.push('├──────────────────────────────────');
+    
+    // Playlist (only show 3 at a time)
+    lines.push('│');
+    for (let i = 0; i < PLAYLIST_VISIBLE; i++) {
+        const idx = playlistViewStart + i;
+        if (idx < tracks.length) {
+            const track = tracks[idx];
+            const isSelected = idx === selectedTrackIndex;
+            const isCurrentlyPlaying = isPlaying && idx === selectedTrackIndex;
+            
+            let prefix = isSelected ? '▶' : ' ';
+            let marker = isCurrentlyPlaying ? '♫' : ' ';
+            
+            const trackNum = (idx + 1).toString().padStart(2);
+            const title = track.title.substring(0, 16).padEnd(16);
+            const duration = track.duration.padStart(5);
+            
+            lines.push(`│${marker}[${trackNum}] ${title} ${duration}${prefix}`);
+        } else {
+            lines.push('│');
+        }
+    }
+    
+    // Scrollbar indicator
+    const scrollPos = playlistViewStart;
+    const totalTracks = tracks.length;
+    const scrollPercent = Math.round((scrollPos / Math.max(1, totalTracks - PLAYLIST_VISIBLE)) * 8);
+    let scrollBar = '░░░░░░░░';
+    if (scrollPos > 0 || playlistViewStart + PLAYLIST_VISIBLE < totalTracks) {
+        scrollBar = '░'.repeat(scrollPercent) + '█' + '░'.repeat(7 - scrollPercent);
+    }
+    const scrollContent = ` [↑↓${scrollBar}] Scroll`;
+    lines.push(`│${scrollContent}`);
+    
+    // Now Playing
+    lines.push('│');
+    if (isPlaying) {
+        const track = tracks[selectedTrackIndex];
+        const timeDisplay = formatTime(currentTime);
+        const nowPlayingContent = ` ♫ ${track.title.substring(0, 18).padEnd(18)} ${timeDisplay}`;
+        lines.push(`│${nowPlayingContent}`);
+    } else if (isPaused && webAudioCurrentTime > 0) {
+        const track = tracks[selectedTrackIndex];
+        const pausedContent = ` ⏸ PAUSED: ${track.title.substring(0, 18).padEnd(18)}`;
+        lines.push(`│${pausedContent}`);
+    } else {
+        lines.push('│ Ready to play');
+    }
+    
+    // Volume
+    const volumePercent3 = volumePercent.toString().padStart(3);
+    const volumeContent = ` Vol: [${volumeBar}] ${volumePercent3}%`;
+    lines.push(`│${volumeContent}`);
+    
+    // Render all lines up to volume
+    for (let i = 0; i < lines.length; i++) {
+        printTo(output, lines[i], i === lines.length - 3 ? 'info' : '');
+    }
+    
+    // Audio visualizer - render right after volume
+    updateVisualizerData();
+    if (isPlaying) {
+        const barCount = 16;
+        
+        // Create visualizer container once, then just update bar heights
+        if (!visualizerContainer) {
+            visualizerContainer = document.createElement('div');
+            visualizerContainer.style.display = 'flex';
+            visualizerContainer.style.alignItems = 'flex-end';
+            visualizerContainer.style.gap = '2px';
+            visualizerContainer.style.height = '20px';
+            visualizerContainer.style.marginLeft = '1em';
+            
+            // Create all bar elements
+            visualizerBars = [];
+            for (let i = 0; i < barCount; i++) {
+                const ratio = i / barCount;
+                let color = '';
+                
+                if (ratio < 0.25) {
+                    color = '#00ff00';
+                } else if (ratio < 0.375) {
+                    color = '#00ffff';
+                } else if (ratio < 0.5) {
+                    color = '#0088ff';
+                } else if (ratio < 0.625) {
+                    color = '#0088ff';
+                } else if (ratio < 0.75) {
+                    color = '#ff00ff';
+                } else {
+                    color = '#ff0000';
+                }
+                
+                const bar = document.createElement('div');
+                bar.style.width = '8px';
+                bar.style.backgroundColor = color;
+                bar.style.transition = 'height 0.05s ease-out';
+                bar.style.minHeight = '2px';
+                
+                visualizerContainer.appendChild(bar);
+                visualizerBars.push(bar);
+            }
+            
+            output.appendChild(visualizerContainer);
+        }
+        
+        // Update bar heights each frame
+        for (let i = 0; i < barCount; i++) {
+            const index = Math.floor((i / barCount) * visualizerData.length);
+            const value = visualizerData[index] / 255;
+            const heightPercent = Math.max(2, value * 100);
+            visualizerBars[i].style.height = heightPercent + '%';
+        }
+    }
+    
+    // Add command tips after visualizer
+    printTo(output, '│ [Enter] Play  [Space] Pause [Q]');
+    printTo(output, '│ [N] Next  [P] Previous');
+    printTo(output, '│ [+/-] Volume');
+    printTo(output, '├──────────────────────────────────');
+    
+    // Scroll to top to show full player UI
+    output.scrollTop = 0;
+}
+
+function formatTime(seconds) {
+    if (isNaN(seconds)) return '0:00';
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
+
+function handlePlayerInput(event) {
+    if (!playerMode) return;
+    
+    const tracks = BAND_DATA.albums[0].tracks;
+    let currentVol = gainNode ? Math.round(gainNode.gain.value * 100) : 100;
+    
+    switch(event.key) {
+        case 'ArrowUp':
+            event.preventDefault();
+            selectedTrackIndex = Math.max(0, selectedTrackIndex - 1);
+            renderPlayerUI();
+            break;
+            
+        case 'ArrowDown':
+            event.preventDefault();
+            selectedTrackIndex = Math.min(tracks.length - 1, selectedTrackIndex + 1);
+            renderPlayerUI();
+            break;
+            
+        case 'Enter':
+            event.preventDefault();
+            playPlayerTrack(selectedTrackIndex);
+            setTimeout(() => renderPlayerUI(), 100);
+            break;
+            
+        case ' ':
+            event.preventDefault();
+            // If nothing is loaded, play selected track
+            if (!isPlaying && !isPaused) {
+                playPlayerTrack(selectedTrackIndex);
+            } else if (isPaused) {
+                // Resume paused track
+                togglePause();
+            } else {
+                // Pause playing track
+                togglePause();
+            }
+            setTimeout(() => renderPlayerUI(), 100);
+            break;
+            
+        case 'n':
+        case 'N':
+            event.preventDefault();
+            selectedTrackIndex = Math.min(tracks.length - 1, selectedTrackIndex + 1);
+            playPlayerTrack(selectedTrackIndex);
+            setTimeout(() => renderPlayerUI(), 100);
+            break;
+            
+        case 'p':
+        case 'P':
+            event.preventDefault();
+            selectedTrackIndex = Math.max(0, selectedTrackIndex - 1);
+            playPlayerTrack(selectedTrackIndex);
+            setTimeout(() => renderPlayerUI(), 100);
+            break;
+            
+        case '+':
+        case '=':
+            event.preventDefault();
+            currentVol = Math.min(100, currentVol + 10);
+            if (gainNode) gainNode.gain.value = currentVol / 100;
+            renderPlayerUI();
+            break;
+            
+        case '-':
+        case '_':
+            event.preventDefault();
+            currentVol = Math.max(0, currentVol - 10);
+            if (gainNode) gainNode.gain.value = currentVol / 100;
+            renderPlayerUI();
+            break;
+            
+        case 'q':
+        case 'Q':
+        case 'Escape':
+            event.preventDefault();
+            exitPlayer();
+            break;
+    }
+}
+
+function exitPlayer() {
+    playerMode = false;
+    if (playerRenderLoop) {
+        clearInterval(playerRenderLoop);
+        playerRenderLoop = null;
+    }
+    stopPlayback();
+    output.innerHTML = '';
+    printToAll('');
+    printToAll('Exiting player...');
+    printToAll('');
 }
