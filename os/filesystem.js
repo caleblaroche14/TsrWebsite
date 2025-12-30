@@ -999,6 +999,20 @@ const filesystem =
                                     "CHRISTMAS.JPG": { "id": "C:/PERSONAL/MISC/CHRISTMAS.JPG", "type": "file", "tags": ["notes"], "content": "binary image data", "filepath": "/assets/images/christmasls.png"
                                     }
                                 }
+                            },
+                            "PHOTOS":{
+                                "id": "C:/PERSONAL/PHOTOS",
+                                "type": "directory",
+                                "children": {
+                                    "BLUE.JPG": { "id": "C:/PERSONAL/PHOTOS/BLUE.JPG", "type": "file", "tags": ["photo"], "content": "binary image data", "filepath": "/assets/images/iccar.jpg"
+                                    },
+                                    "LOTUS944.JPG": { "id": "C:/PERSONAL/PHOTOS/LOTUS944.JPG", "type": "file", "tags": ["photo"], "content": "binary image data", "filepath": "/assets/images/lot944.jpg"
+                                    },
+                                    "LOTUS9442.jpg": { "id": "C:/PERSONAL/PHOTOS/LOTUS9442.JPG", "type": "file", "tags": ["photo"], "content": "binary image data", "filepath": "/assets/images/lot9442.jpg"
+                                    },
+                                    "944ART.JPG": { "id": "C:/PERSONAL/PHOTOS/944ART.JPG", "type": "file", "tags": ["photo"], "content": "binary image data", "filepath": "/assets/images/944art.jpg"
+                                    }
+                                }
                             }
                         }
                     },
