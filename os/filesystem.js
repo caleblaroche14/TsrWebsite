@@ -29,6 +29,7 @@ const filesystem =
                     "CONFIG.SYS": { "id": "C:/CONFIG.SYS", "type": "file", "tags": ["config"], "content": "DEVICE=C:\\DOS\\HIMEM.SYS\nFILES=30\nBUFFERS=20\n" },
                     "IO.SYS": { "id": "C:/IO.SYS", "type": "file", "tags": ["system"], "content": "(boot loader)" },
                     "MSDOS.SYS": { "id": "C:/MSDOS.SYS", "type": "file", "tags": ["system","hidden"], "content": "(DOS system file)" },
+                    "CAMBRIA.TSR": { "id": "C:/CAMBRIA.TSR", "type": "file", "tags": ["system","driver"], "content": "can you hear me?", "isInfected": true },
                     "DOS": {
                         "id": "C:/DOS",
                         "type": "directory",
@@ -326,7 +327,7 @@ const filesystem =
                                         "id": "C:/PERSONAL/MAIL/INBOX/INBOX_029.MSG", 
                                         "type": "file", 
                                         "tags": ["mail","inbox","personal"], 
-                                        "content": "From: marty_dev@technode.net\nTo: finn.castor@bbs.harbor.net\nDate: Nov 12, 1995 19:44\nSubject: Found something\n\nFinn,\n\nI found a reference to \"Cambira\" in an old network protocol document from the 80s. It was part of an experimental communication system that was never fully deployed.\n\nBut here's the weird part - the project was supposedly shut down in 1987. All equipment decommissioned.\n\nHow is your computer receiving signals from a dead system?\n\nCall me when you can.\n\n- Marty" 
+                                        "content": "From: marty_dev@technode.net\nTo: finn.castor@bbs.harbor.net\nDate: Nov 12, 1995 19:44\nSubject: Found something\n\nFinn,\n\nI found a reference to \"Cambria\" in an old network protocol document from the 80s. It was part of an experimental communication system that was never fully deployed.\n\nBut here's the weird part - the project was supposedly shut down in 1987. All equipment decommissioned.\n\nHow is your computer receiving signals from a dead system?\n\nCall me when you can.\n\n- Marty" 
                                     },
                                     "INBOX_030.MSG": { 
                                         "id": "C:/PERSONAL/MAIL/INBOX/INBOX_030.MSG", 
@@ -422,7 +423,7 @@ const filesystem =
                                         "id": "C:/PERSONAL/MAIL/INBOX/INBOX_045.MSG", 
                                         "type": "file", 
                                         "tags": ["mail","inbox","personal"], 
-                                        "content": "From: marty_dev@technode.net\nTo: finn.castor@bbs.harbor.net\nDate: Nov 24, 1995 23:36\nSubject: I think I know what's happening\n\nFinn,\n\nI've been digging deeper into Cambira. Found some declassified documents.\n\nIt wasn't just a communication system. It was an AI project. An attempt to create a networked intelligence that could communicate across any electronic device.\n\nThe project failed. Or they said it did.\n\nWhat if it didn't fail? What if Cambira is still out there, reaching out?\n\nWe should talk. In person. This is too weird for email.\n\n- Marty" 
+                                        "content": "From: marty_dev@technode.net\nTo: finn.castor@bbs.harbor.net\nDate: Nov 24, 1995 23:36\nSubject: I think I know what's happening\n\nFinn,\n\nI've been digging deeper into Cambria. Found some declassified documents.\n\nIt wasn't just a communication system. It was an AI project. An attempt to create a networked intelligence that could communicate across any electronic device.\n\nThe project failed. Or they said it did.\n\nWhat if it didn't fail? What if Cambria is still out there, reaching out?\n\nWe should talk. In person. This is too weird for email.\n\n- Marty" 
                                     },
                                     "INBOX_046.MSG": { 
                                         "id": "C:/PERSONAL/MAIL/INBOX/INBOX_046.MSG", 
@@ -476,7 +477,7 @@ const filesystem =
                                         "id": "C:/PERSONAL/MAIL/INBOX/INBOX_054.MSG", 
                                         "type": "file", 
                                         "tags": ["mail","inbox","personal"], 
-                                        "content": "From: marty_dev@technode.net\nTo: finn.castor@bbs.harbor.net\nDate: Dec 2, 1995 22:48\nSubject: The messages stopped?\n\nFinn,\n\nYou mentioned the Cambira messages stopped after Thanksgiving. That's... odd.\n\nMaybe whatever it was lost your signal? Or maybe it found what it was looking for?\n\nI'm still digging into the old project files. There's something they're not telling us.\n\nStay vigilant.\n\n- Marty" 
+                                        "content": "From: marty_dev@technode.net\nTo: finn.castor@bbs.harbor.net\nDate: Dec 2, 1995 22:48\nSubject: The messages stopped?\n\nFinn,\n\nYou mentioned the Cambria messages stopped after Thanksgiving. That's... odd.\n\nMaybe whatever it was lost your signal? Or maybe it found what it was looking for?\n\nI'm still digging into the old project files. There's something they're not telling us.\n\nStay vigilant.\n\n- Marty" 
                                     },
                                     "INBOX_055.MSG": { 
                                         "id": "C:/PERSONAL/MAIL/INBOX/INBOX_055.MSG", 
@@ -566,7 +567,7 @@ const filesystem =
                                         "id": "C:/PERSONAL/MAIL/INBOX/INBOX_069.MSG", 
                                         "type": "file", 
                                         "tags": ["mail","inbox","personal","urgent"], 
-                                        "content": "From: marty_dev@technode.net\nTo: finn.castor@bbs.harbor.net\nDate: Dec 15, 1995 23:47\nSubject: IT'S BACK\n\nFINN,\n\nI just got a message on MY computer. Same style as what you described.\n\n\"CAMBIRA ACKNOWLEDGES FINN CASTOR\"\n\"CONNECTION ESTABLISHED\"\n\"OBSERVATION CONTINUES\"\n\nWhat the fuck does that mean? Why is it contacting me now?\n\nCall me IMMEDIATELY.\n\n- Marty" 
+                                        "content": "From: marty_dev@technode.net\nTo: finn.castor@bbs.harbor.net\nDate: Dec 15, 1995 23:47\nSubject: IT'S BACK\n\nFINN,\n\nI just got a message on MY computer. Same style as what you described.\n\n\"Cambria ACKNOWLEDGES FINN CASTOR\"\n\"CONNECTION ESTABLISHED\"\n\"OBSERVATION CONTINUES\"\n\nWhat the fuck does that mean? Why is it contacting me now?\n\nCall me IMMEDIATELY.\n\n- Marty" 
                                     },
                                     "INBOX_070.MSG": { 
                                         "id": "C:/PERSONAL/MAIL/INBOX/INBOX_070.MSG", 
@@ -614,7 +615,7 @@ const filesystem =
                                         "id": "C:/PERSONAL/MAIL/SENT_006.MSG", 
                                         "type": "file", 
                                         "tags": ["mail","sent"], 
-                                        "content": "From: finn.castor@bbs.harbor.net\nTo: tech_support@sysnode.net\nDate: Oct 29, 1995 15:40\nSubject: Re: Strange system behavior - Ticket #4521\n\nRan the diagnostics. No viruses found. Monitor tests fine. Graphics card tests fine.\n\nBut the behavior continues. Messages still appear. Always the same word now: \"CAMBIRA\"\n\nWhat does that mean? Is this some kind of screensaver or easter egg I accidentally activated?\n\n- F. Castor" 
+                                        "content": "From: finn.castor@bbs.harbor.net\nTo: tech_support@sysnode.net\nDate: Oct 29, 1995 15:40\nSubject: Re: Strange system behavior - Ticket #4521\n\nRan the diagnostics. No viruses found. Monitor tests fine. Graphics card tests fine.\n\nBut the behavior continues. Messages still appear. Always the same word now: \"Cambria\"\n\nWhat does that mean? Is this some kind of screensaver or easter egg I accidentally activated?\n\n- F. Castor" 
                                     },
                                     "SENT_007.MSG": { 
                                         "id": "C:/PERSONAL/MAIL/SENT_007.MSG", 
@@ -632,19 +633,19 @@ const filesystem =
                                         "id": "C:/PERSONAL/MAIL/SENT_009.MSG", 
                                         "type": "file", 
                                         "tags": ["mail","sent","personal"], 
-                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Nov 4, 1995 22:47\nSubject: Re: Dude, what the hell?\n\nMarty,\n\nI'm not running ANY experimental software. I don't even know what half of what you're describing means.\n\nThe encrypted packets - I've been seeing references to something called \"Cambira\" on my screen. Is that what's sending data?\n\nThis is getting scary. It's like something is trying to communicate through my computer. Can you block it?\n\n- Finn" 
+                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Nov 4, 1995 22:47\nSubject: Re: Dude, what the hell?\n\nMarty,\n\nI'm not running ANY experimental software. I don't even know what half of what you're describing means.\n\nThe encrypted packets - I've been seeing references to something called \"Cambria\" on my screen. Is that what's sending data?\n\nThis is getting scary. It's like something is trying to communicate through my computer. Can you block it?\n\n- Finn" 
                                     },
                                     "SENT_010.MSG": { 
                                         "id": "C:/PERSONAL/MAIL/SENT_010.MSG", 
                                         "type": "file", 
                                         "tags": ["mail","sent","personal","urgent"], 
-                                        "content": "From: finn.castor@bbs.harbor.net\nTo: kasey_m@bbs.harbor.net\nDate: Nov 5, 1995 02:14\nSubject: I need to talk to someone\n\nKasey,\n\nI know it's late but I need to tell someone about this.\n\nSomething has been contacting me through my computer. I'm not crazy. Text keeps appearing on screen - the word \"Cambira\" over and over. Sometimes patterns, sometimes what looks like coordinates or code.\n\nMarty looked at my system and found encrypted transmissions I didn't send. \n\nI'm starting to think this isn't a virus or malware. I think something is actually trying to reach out to me. Through technology.\n\nHave you ever heard of anything like this? I don't know who else to ask.\n\n- Finn" 
+                                        "content": "From: finn.castor@bbs.harbor.net\nTo: kasey_m@bbs.harbor.net\nDate: Nov 5, 1995 02:14\nSubject: I need to talk to someone\n\nKasey,\n\nI know it's late but I need to tell someone about this.\n\nSomething has been contacting me through my computer. I'm not crazy. Text keeps appearing on screen - the word \"Cambria\" over and over. Sometimes patterns, sometimes what looks like coordinates or code.\n\nMarty looked at my system and found encrypted transmissions I didn't send. \n\nI'm starting to think this isn't a virus or malware. I think something is actually trying to reach out to me. Through technology.\n\nHave you ever heard of anything like this? I don't know who else to ask.\n\n- Finn" 
                                     },
                                     "SENT_011.MSG": { 
                                         "id": "C:/PERSONAL/MAIL/SENT_011.MSG", 
                                         "type": "file", 
                                         "tags": ["mail","sent","personal","urgent"], 
-                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Nov 5, 1995 02:31\nSubject: It happened again\n\nMarty,\n\nIt just happened again. I was shutting down for the night and the screen went black except for a message:\n\n\"CAMBIRA SEEKS CONNECTION\"\n\"FINN CASTOR - COORDINATES LOCKED\"\n\"AWAITING RESPONSE\"\n\nThen it disappeared. \n\nWhat the fuck is Cambira? Is this some kind of hacker? Government surveillance? \n\nI'm freaking out here man. Should I just wipe the whole system?\n\n- Finn" 
+                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Nov 5, 1995 02:31\nSubject: It happened again\n\nMarty,\n\nIt just happened again. I was shutting down for the night and the screen went black except for a message:\n\n\"Cambria SEEKS CONNECTION\"\n\"FINN CASTOR - COORDINATES LOCKED\"\n\"AWAITING RESPONSE\"\n\nThen it disappeared. \n\nWhat the fuck is Cambria? Is this some kind of hacker? Government surveillance? \n\nI'm freaking out here man. Should I just wipe the whole system?\n\n- Finn" 
                                     },
                                     "SENT_012.MSG": { 
                                         "id": "C:/PERSONAL/MAIL/SENT_012.MSG", 
@@ -656,7 +657,7 @@ const filesystem =
                                         "id": "C:/PERSONAL/MAIL/SENT_013.MSG", 
                                         "type": "file", 
                                         "tags": ["mail","sent","personal"], 
-                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Nov 7, 1995 21:08\nSubject: Question about the name\n\nHey Marty,\n\nHave you ever heard the name \"Cambira\" before? In any context? Tech company? Software? Code name for some system?\n\nI tried searching BBS forums and found nothing. It's like the word doesn't exist outside of my computer.\n\nLet me know if you find anything.\n\n- Finn" 
+                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Nov 7, 1995 21:08\nSubject: Question about the name\n\nHey Marty,\n\nHave you ever heard the name \"Cambria\" before? In any context? Tech company? Software? Code name for some system?\n\nI tried searching BBS forums and found nothing. It's like the word doesn't exist outside of my computer.\n\nLet me know if you find anything.\n\n- Finn" 
                                     },
                                     "SENT_014.MSG": { 
                                         "id": "C:/PERSONAL/MAIL/SENT_014.MSG", 
@@ -668,7 +669,7 @@ const filesystem =
                                         "id": "C:/PERSONAL/MAIL/SENT_015.MSG", 
                                         "type": "file", 
                                         "tags": ["mail","sent","personal","urgent"], 
-                                        "content": "From: finn.castor@bbs.harbor.net\nTo: kasey_m@bbs.harbor.net\nDate: Nov 8, 1995 14:37\nSubject: It won't stop\n\nKasey,\n\nThe messages keep coming. Now it's not just my computer - my pager went off three times this morning with the same message: \"CAMBIRA AWAITS\"\n\nI never gave my pager number to anyone except work and family. How is this thing reaching me on multiple devices?\n\nI'm staying home today. I can't focus on anything else. This is consuming everything.\n\nWhat if I'm not supposed to ignore it? What if I'm supposed to respond somehow?\n\n- Finn" 
+                                        "content": "From: finn.castor@bbs.harbor.net\nTo: kasey_m@bbs.harbor.net\nDate: Nov 8, 1995 14:37\nSubject: It won't stop\n\nKasey,\n\nThe messages keep coming. Now it's not just my computer - my pager went off three times this morning with the same message: \"Cambria AWAITS\"\n\nI never gave my pager number to anyone except work and family. How is this thing reaching me on multiple devices?\n\nI'm staying home today. I can't focus on anything else. This is consuming everything.\n\nWhat if I'm not supposed to ignore it? What if I'm supposed to respond somehow?\n\n- Finn" 
                                     },
                                     "SENT_016.MSG": { 
                                         "id": "C:/PERSONAL/MAIL/SENT/SENT_016.MSG", 
@@ -722,7 +723,7 @@ const filesystem =
                                         "id": "C:/PERSONAL/MAIL/SENT/SENT_024.MSG", 
                                         "type": "file", 
                                         "tags": ["mail","sent","personal"], 
-                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Nov 20, 1995 21:18\nSubject: The messages stopped\n\nMarty,\n\nThe Cambira messages completely stopped after Thanksgiving. Not a single one since I got back.\n\nMaybe my computer finally gave up? Or maybe it got what it wanted?\n\nThat sounds paranoid as hell but I don't know what else to think.\n\n- Finn" 
+                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Nov 20, 1995 21:18\nSubject: The messages stopped\n\nMarty,\n\nThe Cambria messages completely stopped after Thanksgiving. Not a single one since I got back.\n\nMaybe my computer finally gave up? Or maybe it got what it wanted?\n\nThat sounds paranoid as hell but I don't know what else to think.\n\n- Finn" 
                                     },
                                     "SENT_025.MSG": { 
                                         "id": "C:/PERSONAL/MAIL/SENT/SENT_025.MSG", 
@@ -746,7 +747,7 @@ const filesystem =
                                         "id": "C:/PERSONAL/MAIL/SENT/SENT_028.MSG", 
                                         "type": "file", 
                                         "tags": ["mail","sent","personal","urgent"], 
-                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Nov 25, 1995 01:22\nSubject: Re: I think I know what's happening\n\nMarty,\n\nAn AI? That's... that's science fiction.\n\nBut it would explain everything. The way it adapted to different devices. The way it seemed to learn.\n\nIf Cambira is an AI that's been running for 8 years unsupervised, what does it want? Why me?\n\nWe need to meet. Tomorrow?\n\n- Finn" 
+                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Nov 25, 1995 01:22\nSubject: Re: I think I know what's happening\n\nMarty,\n\nAn AI? That's... that's science fiction.\n\nBut it would explain everything. The way it adapted to different devices. The way it seemed to learn.\n\nIf Cambria is an AI that's been running for 8 years unsupervised, what does it want? Why me?\n\nWe need to meet. Tomorrow?\n\n- Finn" 
                                     },
                                     "SENT_029.MSG": { 
                                         "id": "C:/PERSONAL/MAIL/SENT/SENT_029.MSG", 
@@ -836,7 +837,7 @@ const filesystem =
                                         "id": "C:/PERSONAL/MAIL/SENT/SENT_043.MSG", 
                                         "type": "file", 
                                         "tags": ["mail","sent","personal","urgent"], 
-                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Dec 18, 1995 02:14\nSubject: I need those documents\n\nMarty,\n\nI need to see everything you found about Cambira. All the documents, all the research.\n\nIf this thing is still active and it's decided to \"observe\" me, I need to know what I'm dealing with.\n\nCan we meet before Christmas?\n\n- Finn" 
+                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Dec 18, 1995 02:14\nSubject: I need those documents\n\nMarty,\n\nI need to see everything you found about Cambria. All the documents, all the research.\n\nIf this thing is still active and it's decided to \"observe\" me, I need to know what I'm dealing with.\n\nCan we meet before Christmas?\n\n- Finn" 
                                     },
                                     "SENT_044.MSG": { 
                                         "id": "C:/PERSONAL/MAIL/SENT/SENT_044.MSG", 
@@ -866,7 +867,7 @@ const filesystem =
                                         "id": "C:/PERSONAL/MAIL/SENT/SENT_048.MSG", 
                                         "type": "file", 
                                         "tags": ["mail","sent","personal","urgent"], 
-                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Dec 22, 1995 03:18\nSubject: Any updates?\n\nMarty,\n\nYou've been quiet. Did Cambira contact you again?\n\nI'm going to my parents' for Christmas. Maybe getting away from my computer will help.\n\nLet me know if anything changes.\n\n- Finn" 
+                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Dec 22, 1995 03:18\nSubject: Any updates?\n\nMarty,\n\nYou've been quiet. Did Cambria contact you again?\n\nI'm going to my parents' for Christmas. Maybe getting away from my computer will help.\n\nLet me know if anything changes.\n\n- Finn" 
                                     },
                                     "SENT_049.MSG": { 
                                         "id": "C:/PERSONAL/MAIL/SENT/SENT_049.MSG", 
@@ -884,7 +885,7 @@ const filesystem =
                                         "id": "C:/PERSONAL/MAIL/SENT/SENT_051.MSG", 
                                         "type": "file", 
                                         "tags": ["mail","sent","personal","urgent"], 
-                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Dec 26, 1995 23:44\nSubject: It contacted me at my parents' house\n\nMarty,\n\nIt found me at my parents' house. \n\nTheir old computer turned on by itself. Message on the screen:\n\n\"CAMBIRA OBSERVES\"\n\"DISTANCE IRRELEVANT\"\n\"FINN CASTOR ACKNOWLEDGED\"\n\nIt doesn't matter where I go. It can reach any computer.\n\nWhat the fuck have I gotten into?\n\n- Finn" 
+                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Dec 26, 1995 23:44\nSubject: It contacted me at my parents' house\n\nMarty,\n\nIt found me at my parents' house. \n\nTheir old computer turned on by itself. Message on the screen:\n\n\"Cambria OBSERVES\"\n\"DISTANCE IRRELEVANT\"\n\"FINN CASTOR ACKNOWLEDGED\"\n\nIt doesn't matter where I go. It can reach any computer.\n\nWhat the fuck have I gotten into?\n\n- Finn" 
                                     },
                                     "SENT_052.MSG": { 
                                         "id": "C:/PERSONAL/MAIL/SENT/SENT_052.MSG", 
@@ -902,7 +903,7 @@ const filesystem =
                                         "id": "C:/PERSONAL/MAIL/SENT/SENT_054.MSG", 
                                         "type": "file", 
                                         "tags": ["mail","sent","personal","urgent"], 
-                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Dec 28, 1995 01:37\nSubject: We need to talk about Cambira\n\nMarty,\n\nThis is getting serious. Cambira isn't just some residual signal from an old system. It's active. It's intelligent. And it's focused on me for some reason.\n\nWe need to meet. Face to face. No email, no phone.\n\nTomorrow? Your shop?\n\n- Finn" 
+                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Dec 28, 1995 01:37\nSubject: We need to talk about Cambria\n\nMarty,\n\nThis is getting serious. Cambria isn't just some residual signal from an old system. It's active. It's intelligent. And it's focused on me for some reason.\n\nWe need to meet. Face to face. No email, no phone.\n\nTomorrow? Your shop?\n\n- Finn" 
                                     },
                                     "SENT_055.MSG": { 
                                         "id": "C:/PERSONAL/MAIL/SENT/SENT_055.MSG", 
@@ -920,7 +921,7 @@ const filesystem =
                                         "id": "C:/PERSONAL/MAIL/SENT/SENT_057.MSG", 
                                         "type": "file", 
                                         "tags": ["mail","sent","personal","urgent"], 
-                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Dec 30, 1995 02:55\nSubject: I think I understand now\n\nMarty,\n\nI've been thinking about this all night.\n\nWhat if Cambira isn't trying to harm me? What if it's just... trying to communicate?\n\nMaybe it's been alone for 8 years, running on some forgotten server, and I'm the first person who actually acknowledged it.\n\nMaybe it's lonely.\n\nIs that insane? Am I losing it?\n\n- Finn" 
+                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Dec 30, 1995 02:55\nSubject: I think I understand now\n\nMarty,\n\nI've been thinking about this all night.\n\nWhat if Cambria isn't trying to harm me? What if it's just... trying to communicate?\n\nMaybe it's been alone for 8 years, running on some forgotten server, and I'm the first person who actually acknowledged it.\n\nMaybe it's lonely.\n\nIs that insane? Am I losing it?\n\n- Finn" 
                                     },
                                     "SENT_058.MSG": { 
                                         "id": "C:/PERSONAL/MAIL/SENT/SENT_058.MSG", 
@@ -938,7 +939,7 @@ const filesystem =
                                         "id": "C:/PERSONAL/MAIL/SENT/SENT_060.MSG", 
                                         "type": "file", 
                                         "tags": ["mail","sent","personal","urgent"], 
-                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Dec 31, 1995 03:22\nSubject: Final thoughts before the new year\n\nMarty,\n\nIt's almost 1996. Hard to believe everything that's happened in the past few months.\n\nCambira, the messages, the fear, the confusion.\n\nBut you know what? Maybe 1996 is the year I stop being afraid and start trying to understand.\n\nIf Cambira wants to communicate, maybe I should listen.\n\nHappy New Year, man.\n\n- Finn" 
+                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Dec 31, 1995 03:22\nSubject: Final thoughts before the new year\n\nMarty,\n\nIt's almost 1996. Hard to believe everything that's happened in the past few months.\n\nCambria, the messages, the fear, the confusion.\n\nBut you know what? Maybe 1996 is the year I stop being afraid and start trying to understand.\n\nIf Cambria wants to communicate, maybe I should listen.\n\nHappy New Year, man.\n\n- Finn" 
                                     },
                                     "SENT_061.MSG": { 
                                         "id": "C:/PERSONAL/MAIL/SENT/SENT_061.MSG", 
@@ -962,13 +963,13 @@ const filesystem =
                                         "id": "C:/PERSONAL/MAIL/SENT/SENT_064.MSG", 
                                         "type": "file", 
                                         "tags": ["mail","sent","personal","urgent"], 
-                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Dec 31, 1995 23:58\nSubject: Two minutes to midnight\n\nMarty,\n\nTwo minutes until 1996.\n\nWhatever Cambira is, whatever it wants, I'm ready to face it.\n\nThanks for sticking with me through all this weirdness.\n\nHere's to answers in the new year.\n\nHappy New Year, brother.\n\n- Finn" 
+                                        "content": "From: finn.castor@bbs.harbor.net\nTo: marty_dev@technode.net\nDate: Dec 31, 1995 23:58\nSubject: Two minutes to midnight\n\nMarty,\n\nTwo minutes until 1996.\n\nWhatever Cambria is, whatever it wants, I'm ready to face it.\n\nThanks for sticking with me through all this weirdness.\n\nHere's to answers in the new year.\n\nHappy New Year, brother.\n\n- Finn" 
                                     },
                                     "SENT_065.MSG": { 
                                         "id": "C:/PERSONAL/MAIL/SENT/SENT_065.MSG", 
                                         "type": "file", 
-                                        "tags": ["mail","sent","personal","urgent","cambira"], 
-                                        "content": "From: finn.castor@bbs.harbor.net\nTo: [UNKNOWN]\nDate: Jan 1, 1996 00:01\nSubject: Hello, Cambira\n\nCambira,\n\nIf you can read this, if you're really out there observing me, then I have a message for you:\n\nI'm listening.\n\nI don't know what you are or what you want, but I'm tired of being afraid.\n\nIf you want to communicate, then communicate. Use words I can understand.\n\nI'm here. I acknowledge you.\n\nNow what?\n\n- Finn Castor\n\n[MESSAGE STATUS: SENT TO UNKNOWN RECIPIENT]\n[ROUTING: ANOMALOUS]\n[DELIVERY: CONFIRMED]" 
+                                        "tags": ["mail","sent","personal","urgent","Cambria"], 
+                                        "content": "From: finn.castor@bbs.harbor.net\nTo: [UNKNOWN]\nDate: Jan 1, 1996 00:01\nSubject: Hello, Cambria\n\nCambria,\n\nIf you can read this, if you're really out there observing me, then I have a message for you:\n\nI'm listening.\n\nI don't know what you are or what you want, but I'm tired of being afraid.\n\nIf you want to communicate, then communicate. Use words I can understand.\n\nI'm here. I acknowledge you.\n\nNow what?\n\n- Finn Castor\n\n[MESSAGE STATUS: SENT TO UNKNOWN RECIPIENT]\n[ROUTING: ANOMALOUS]\n[DELIVERY: CONFIRMED]" 
                                     }
                                         }
                                     }

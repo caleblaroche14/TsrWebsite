@@ -9,7 +9,9 @@
 <body>
   <audio id="audio" src=""></audio>
     <div class="computer-screen terminal-overlay">
-      <div class="terminal">
+      <div id="terminalbg"></div>
+      <div id="terminalbg-img" class="opaque"></div>
+      <div id="terminal">
         <div id="terminal-window">
         </div>
         <div class="terminal-input">
@@ -66,11 +68,18 @@
         <div class="grey padding10">[q] Quit</div>
       </div>
 
+      <div id="scan-display" class="hidden">
+        <div class="grey padding10">Scanned File Info</div>
+        <div class="padding10" id="scan-log"></div>
+        <div class="grey padding10">[q] Quit</div>
+      </div>
+
       <div id="loading" class="hidden">Loading...</div>
     </div>
 </body>
 <script type="text/javascript" src="os/filesystem.js"></script>
  <script type="text/javascript" src="os/commands.js"></script>
  <script type="text/javascript" src="os/utilities.js"></script>
+ <script type="text/javascript" src="os/cambria.js"></script>
 <script src="script.js"></script>
 </html>

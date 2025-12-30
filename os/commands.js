@@ -311,6 +311,67 @@ const commands = [
 
       return `Displaying text file: ${target}`;
     }
+  },
+  {
+    command: "SCAN",
+    description: "Scan inputted file to see if it contains viruses",
+    boxWrap: false,
+    execute(args) {
+      if (!args || args.length === 0) return "Please specify a file name to scan.";
+
+      const target = args[0];
+      const currentDir = GetCurrentDirectory();
+      if (!currentDir || !currentDir.children) {
+        return `The system cannot find the path specified: ${target}`;
+      }
+
+      const matchKey = Object.keys(currentDir.children)
+        .find(k => k.toLowerCase() === target.toLowerCase());
+
+      if (!matchKey) return `The system cannot find the file specified: ${target}`;
+      const fileNode = currentDir.children[matchKey];
+      if (fileNode.type !== 'file') return `${target} is not a valid file.`;
+
+      let scandisplay = document.getElementById("scan-display");
+      let scanlog = document.getElementById("scan-log");
+      
+      scandisplay.classList.remove("hidden");
+      scanlog.innerHTML = '';
+
+
+      function hideScanOnQ(event) {
+        if (event.key.toLowerCase() === 'q') {
+          scandisplay.classList.add("hidden");
+          scanlog.innerHTML = '';
+          removeEventListener('keydown', hideScanOnQ);
+        }
+      }
+      addEventListener('keydown', hideScanOnQ);
+
+      scanlog.innerHTML += `Scanning file: ${target}...<br>`;
+      
+      // Simulate scanning process
+      AddTerminalLine(`Scanning file: ${target}...`);
+      if (fileNode.isInfected) {
+        cambriaMode = true;
+        scanlog.innerHTML += `Virus detected! File ${target} is infected with CAMBRIA.TSR<br>`;
+        setTimeout(() => {RunCommand('CLS');}, 100);
+        setTimeout(() => {RunCommand('ECHO CAN YOU HEAR ME?');}, 500);
+        setTimeout(() => {RunCommand('ECHO HELLO?');}, 10200);
+        setTimeout(() => {RunCommand('ECHO LETS PLAY A GAME OR SOMETHING');}, 10500);
+      }
+
+      // loop over all properties of fileNode and print them to the scanlog
+      if (fileNode.type === 'file'){
+        for (const prop in fileNode) {
+          if (fileNode.hasOwnProperty(prop)) {
+            scanlog.innerHTML += `${prop}: ${fileNode[prop]}<br>`;
+          }
+        }
+      } else{
+        scanlog.innerHTML += `File type is not valid for scanning.<br>`;
+      }
+    }
   }
 ];
 

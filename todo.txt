@@ -9,11 +9,16 @@ IDEAS:
         - make it childlike (who are you, will you play games with me, etc.)
     - Do power button once again
         - provide alternate path with links (poster on wall?)
-    - x have MEM command make it so you see a program running like "Cambria.exe" 
+    x - have MEM command make it so you see a program running like "Cambria.exe" 
         - have a way to inspect it so that cambria tries to talk to you once you've interacted with it 
+
+PLAYER:
+    - audio visualizer
+    - volume on player
+    
 
     
 DONE
-- x download command
-- x command history
-- x chunk images in loading
+x - download command
+x - command history
+x - chunk images in loading
