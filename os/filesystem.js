@@ -71,6 +71,7 @@ const filesystem =
                                             "Transmission.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/Transmission.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_Transmission_Mastered.mp3', 'album': 'Carrier Wave' },
                                             "TwoThree.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/TwoThree.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_TwoThree_Mastered.mp3', 'album': 'Carrier Wave' },
                                             "Waiting.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/Waiting.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_Waiting_Mastered.mp3' }, 'album': 'Carrier Wave',  
+                                            "CARRIERWAVE_FULLALBUM.ZIP": { "id": "C:/MUSIC/ALBUMS/CarrierWave/CARRIERWAVE_FULLALBUM.ZIP", "artist": "TSR","type": "file", "tags": ["archive","music"], "content": "(zip archive of full album)", "filepath": '/assets/music/albums/CarrierWave/CARRIERWAVE_FULLALBUM.zip', 'album': 'Carrier Wave' }
                                         }
                                     }
                                 }

@@ -4,10 +4,16 @@ CONTACT:
     - Kickstarter website Command
 
 IDEAS: 
+    - better cursor
     - Have the AI (Cambria) try to contact you
         - make it childlike (who are you, will you play games with me, etc.)
     - Do power button once again
         - provide alternate path with links (poster on wall?)
     - x have MEM command make it so you see a program running like "Cambria.exe" 
         - have a way to inspect it so that cambria tries to talk to you once you've interacted with it 
-    - chunk images in loading
+
+    
+DONE
+- x download command
+- x command history
+- x chunk images in loading

@@ -1,6 +1,8 @@
 
 var dir = "C:";
 var programActive = false;
+var commandHistory = [];
+var commandIdx = -1;
 
 function AddTerminalLine(data){
     const terminalContent = document.getElementById("terminal-window");
@@ -16,6 +18,8 @@ function AddTerminalLine(data){
 }
 
 function RunCommand(inputStr){
+    commandHistory.push(inputStr);
+    commandIdx = commandHistory.length;
     inputStr = inputStr;
     let commandStr = inputStr.split(' ')[0];
     let params = inputStr.split(' ').slice(1);
@@ -50,31 +54,41 @@ setTimeout(() => { AddTerminalLine("Loading modules..."); }, 300);
 setTimeout(() => { AddTerminalLine("Starting services..."); }, 500);
 setTimeout(() => { AddTerminalLine("System ready."); }, 700);
 
-setTimeout(()=> {AddTerminalLine("      _____                    _____                    _____          ");}, 900);
-setTimeout(()=> {AddTerminalLine("     /\    \                  /\    \                  /\    \         ");}, 900);
-setTimeout(()=> {AddTerminalLine("    /::\    \                /::\    \                /::\    \        ");}, 900);
-setTimeout(()=> {AddTerminalLine("    \:::\    \              /::::\    \              /::::\    \       ");}, 900);
-setTimeout(()=> {AddTerminalLine("     \:::\    \            /::::::\    \            /::::::\    \      ");}, 900);
-setTimeout(()=> {AddTerminalLine("      \:::\    \          /:::/\:::\    \          /:::/\:::\    \     ");}, 900);
-setTimeout(()=> {AddTerminalLine("       \:::\    \        /:::/__\:::\    \        /:::/__\:::\    \    ");}, 900);
-setTimeout(()=> {AddTerminalLine("       /::::\    \       \:::\   \:::\    \      /::::\   \:::\    \   ");}, 900);
-setTimeout(()=> {AddTerminalLine("      /::::::\    \    ___\:::\   \:::\    \    /::::::\   \:::\    \  ");}, 900);
-setTimeout(()=> {AddTerminalLine("     /:::/\:::\    \  /\   \:::\   \:::\    \  /:::/\:::\   \:::\____\ ");}, 900);
-setTimeout(()=> {AddTerminalLine("    /:::/  \:::\____\/::\   \:::\   \:::\____\/:::/  \:::\   \:::|    |");}, 900);
-setTimeout(()=> {AddTerminalLine("   /:::/    \::/    /\:::\   \:::\   \::/    /\::/   |::::\  /:::|____|");}, 900);
-setTimeout(()=> {AddTerminalLine("  /:::/    / \/____/  \:::\   \:::\   \/____/  \/____|:::::\/:::/    / ");}, 900);
-setTimeout(()=> {AddTerminalLine(" /:::/    /            \:::\   \:::\    \            |:::::::::/    /  ");}, 900);
-setTimeout(()=> {AddTerminalLine("/:::/    /              \:::\   \:::\____\           |::|\::::/    /   ");}, 900);
-setTimeout(()=> {AddTerminalLine("\::/    /                \:::\  /:::/    /           |::| \::/____/    ");}, 900);
-setTimeout(()=> {AddTerminalLine(" \/____/                  \:::\/:::/    /            |::|  ~|          ");}, 900);
-setTimeout(()=> {AddTerminalLine("                           \::::::/    /             |::|   |          ");}, 900);
-setTimeout(()=> {AddTerminalLine("                            \::::/    /              \::|   |          ");}, 900);
-setTimeout(()=> {AddTerminalLine("                             \::/    /                \:|   |          ");}, 900);
-setTimeout(()=> {AddTerminalLine("                              \/____/                  \|___|          ");}, 900);
-setTimeout(()=> {AddTerminalLine("                                                                       ");}, 900);
-//setTimeout(() => { RunCommand("cd music"); }, 800);
-//setTimeout(() => { RunCommand("cd albums"); }, 900);
-//setTimeout(() => { RunCommand("cd carrierwave"); },1000);
+setTimeout(()=> {AddTerminalLine(" _____ ____  ____  ");}, 900);
+setTimeout(()=> {AddTerminalLine("|_   _/ ___||  _ \\ ");}, 975);
+setTimeout(()=> {AddTerminalLine("  | | \\___ \\| |_) |");}, 1100);
+setTimeout(()=> {AddTerminalLine("  | |  ___) |  _ < ");}, 1240);
+setTimeout(()=> {AddTerminalLine("  |_| |____/|_| \\_\\");}, 1334);
+
+//setTimeout(() => { RunCommand("cd music"); }, 2000);
+//setTimeout(() => { RunCommand("cd albums"); }, 2010);
+//setTimeout(() => { RunCommand("cd carrierwave"); },2020);
+//setTimeout(() => { RunCommand("imgview artwork.jpg"); }, 2030);
+
+// add eventlistener for input on up arrow that fills the input with the last command
+commandInput.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (commandHistory.length > 0 && commandIdx > 0) {
+            commandIdx--;
+            commandInput.value = commandHistory[commandIdx];
+        }
+        console.log(commandHistory);
+    }
+});
+
+// add same for down arrow to get the next command
+commandInput.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        commandIdx++;
+        if (commandHistory.length > 0 && commandIdx < commandHistory.length) {
+            commandInput.value = commandHistory[commandIdx];
+        }
+        console.log(commandHistory);
+    }
+});
+
 //setTimeout(() => { RunCommand("imgview artwork.jpg"); }, 1100);
 // generate random number between two inputs
 function getRandomInt(min, max) {

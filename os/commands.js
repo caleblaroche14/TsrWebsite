@@ -188,6 +188,16 @@ const commands = [
     description: "View image file (with file name)",
     boxWrap: false,
     execute(args) {
+      const imageDisplay = document.getElementById("image-display");
+      const displayedImage = document.getElementById("displayed-image");
+
+      displayedImage.classList.add("bit8");
+
+      let imgblocks = document.getElementsByClassName("img-block");
+      for (let i = 0; i < imgblocks.length; i++) {
+        imgblocks[i].classList.remove("opaque");
+      }
+
       if (!args || args.length === 0) return "Please specify an image file name.";
 
       const target = args[0];
@@ -203,12 +213,19 @@ const commands = [
       const fileNode = currentDir.children[matchKey];
       if (fileNode.type !== 'file' || !fileNode.filepath) return `${target} is not a valid image file.`;
       
-      const imageDisplay = document.getElementById("image-display");
-      const displayedImage = document.getElementById("displayed-image");
+
       displayedImage.src = fileNode.filepath;
       imageDisplay.classList.remove("hidden");
 
-      console.log('Displaying image:', fileNode.filepath);
+      console.log(imgblocks);
+      for (let i = 0; i < imgblocks.length; i++) {
+        setTimeout(() => {
+          imgblocks[i].classList.add("opaque");
+        }, (i*200));
+      }
+
+      setTimeout(()=>{displayedImage.classList.remove("bit8");}, getRandomInt(3000, 5000)); 
+     
 
       // add an event listener to hide the image when "q" is pressed
       function hideImageOnQ(event) {
@@ -221,6 +238,37 @@ const commands = [
       addEventListener('keydown', hideImageOnQ);
 
       return `Displaying image: ${target}`;
+    }
+  },
+  {
+    command: "DOWNLOAD",
+    description: "Download a file (with file name or directory)",
+    boxWrap: false,
+    execute(args) {
+      if (!args || args.length === 0) return "Please specify a file or directory name.";
+      
+      const target = args[0];
+      const currentDir = GetCurrentDirectory();
+      if (!currentDir || !currentDir.children) {
+        return `The system cannot find the path specified: ${target}`;
+      }
+
+      const matchKey = Object.keys(currentDir.children)
+        .find(k => k.toLowerCase() === target.toLowerCase());
+
+      if (!matchKey) return `The system cannot find the file or directory specified: ${target}`;
+      const fileNode = currentDir.children[matchKey];
+      if (fileNode.type === 'directory') return `${target} is a directory. Please specify a file.`;
+      if (!fileNode.filepath) return `${target} is not a valid file.`;
+
+      const link = document.createElement('a');
+      link.href = fileNode.filepath;
+      link.download = target;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      return `Downloading file: ${target}`;
     }
   }
 ];
