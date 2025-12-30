@@ -1,106 +1,81 @@
-# TSR Website - Terminate and Stay Resident
+# TSR Website
 
-A DOS-style terminal emulator website for the band **Terminate and Stay Resident**.
+A retro DOS terminal interface for the band Terminate and Stay Resident (TSR). The website simulates a command-line operating system where users navigate a virtual filesystem to access band information, stream music, and view artwork.
 
 ## Features
 
-- 🖥️ Authentic DOS terminal interface
-- 📱 Responsive design (desktop shows computer SVG, mobile shows full-screen terminal)
-- 🎵 Music playback with `play` command
-- 📀 Album and track listings
-- 🖼️ Album artwork viewer
-- 📖 Band lore/story
-- 👥 Artist information
-- ⬇️ Download functionality
-- 🔊 Volume control
+- **Virtual DOS Environment**: Full terminal emulator with working filesystem commands (DIR, CD, TREE, TYPE, etc.)
+- **Music Player**: Stream tracks from the Carrier Wave album through a built-in terminal-based audio player
+- **Interactive Computer**: SVG-rendered classic computer with functional power button
+- **Virtual Filesystem**: Hierarchical directory structure containing band info, member profiles, social links, and album data
+- **Email Signup**: Newsletter subscription via Netlify serverless function
+- **Responsive Design**: Adapts from desktop to mobile with terminal-optimized layouts
 
-## Commands
+## Technology Stack
 
-| Command | Description |
-|---------|-------------|
-| `help` | Show all available commands |
-| `albums` | List all albums |
-| `tracks <album#>` | List tracks from an album |
-| `play <track#>` | Play a specific track |
-| `play album <album#>` | Play an entire album |
-| `stop` | Stop playback |
-| `pause` | Pause/resume playback |
-| `volume <0-100>` | Set playback volume |
-| `artwork <album#>` | View album artwork |
-| `download <track#>` | Download a track |
-| `download album <album#>` | Download an album |
-| `lore` | Read the band's story |
-| `band` | View band member info |
-| `band <member#>` | View specific member info |
-| `social` | View social media links |
-| `clear` / `cls` | Clear the terminal |
-| `dir` | Show directory listing |
-| `ver` | Version information |
-| `about` | About this interface |
+- Pure JavaScript (no frameworks)
+- HTML5 Audio API for music playback
+- CSS with CRT monitor effects (scanlines, vignette, flicker)
+- VT323 monospace font for authentic DOS appearance
+- Netlify Functions for backend email handling
+- JSON-based data structure for band content
 
-## Setup
-
-1. **Add your music files** to `/assets/music/`:
-   - `track01.mp3`, `track02.mp3`, etc.
-
-2. **Add album artwork** to `/assets/`:
-   - `album1.jpg`, `album2.jpg`, etc.
-
-3. **Update `terminal.js`** with your actual:
-   - Band name and info
-   - Album titles and years
-   - Track names and durations
-   - File paths to your music
-   - Social media links
-   - Band member information
-   - Lore/story text
-
-## File Structure
+## Project Structure
 
 ```
-TsrWebsite/
-├── index.html          # Main HTML file
-├── styles.css          # All styling (CRT effects, terminal look)
-├── terminal.js         # Terminal logic and band data
-├── README.md           # This file
-└── assets/
-    ├── doscomputer.svg # DOS computer graphic
-    ├── album1.jpg      # Album artwork (add your own)
-    ├── album2.jpg      # Album artwork (add your own)
-    └── music/          # Audio files (add your own)
-        ├── track01.mp3
-        ├── track02.mp3
-        └── ...
+├── index.html              # Main HTML with inline SVG computer
+├── script.js               # Terminal initialization and event handling
+├── styles.css              # DOS terminal styling and effects
+├── os/
+│   ├── commands.js         # Terminal command implementations
+│   ├── filesystem.js       # Virtual filesystem structure
+│   └── utilities.js        # Helper functions
+├── data/
+│   ├── albums.json         # Album information
+│   ├── bandInfo.json       # Band details
+│   ├── members.json        # Band member profiles
+│   ├── socials.json        # Social media links
+│   └── bootSequence.json   # Startup ASCII art
+├── assets/
+│   ├── fonts/              # Custom fonts
+│   ├── images/             # Graphics and artwork
+│   └── music/albums/       # Audio files
+└── netlify/functions/
+    └── submit-email.js     # Email submission handler
+
 ```
 
-## Customization
+## Available Commands
 
-### Changing Colors
-Edit the CSS variables in `styles.css`:
-- Main green: `#33ff33`
-- Background: `#0a0a0a`
-- Yellow (commands): `#ffff33`
-- Cyan (info): `#33ffff`
-- Magenta (headers): `#ff33ff`
+- `HELP` - Display all available commands
+- `DIR` - List directory contents
+- `CD [path]` - Change directory
+- `TREE` - Display directory tree structure
+- `TYPE [file]` - Read file contents
+- `PLAY [album]` - Launch music player
+- `CLS` - Clear terminal screen
+- `DATE` - Show current date and time
+- `ECHO [text]` - Display text
 
-### Adding More Commands
-Add new entries to the `COMMANDS` object in `terminal.js`.
+## Running Locally
 
-### Updating Band Data
-Edit the `BAND_DATA` object at the top of `terminal.js`.
+1. Clone the repository
+2. Open `index.html` in a web browser
+3. Click the power button on the computer to boot the terminal
 
-## Browser Support
+For development with Netlify functions:
+```bash
+npm install netlify-cli -g
+netlify dev
+```
 
-Works on all modern browsers. Uses:
-- CSS Grid/Flexbox
-- ES6+ JavaScript
-- Web Audio API
-- Google Fonts (VT323)
+## Band Information
+
+- **Name**: Terminate and Stay Resident (TSR)
+- **Genre**: Electronic / Synthwave / Indie
+- **Album**: Carrier Wave (2024)
+- **Tracks**: 15 original compositions
 
 ## License
 
-Created for Terminate and Stay Resident.
-
----
-
-*Stay resident. Stay vigilant. The next interrupt is coming.*
+Copyright 2025 Terminate and Stay Resident
