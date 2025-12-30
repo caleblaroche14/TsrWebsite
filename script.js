@@ -50,18 +50,19 @@ commandInput.addEventListener('keydown', (e) => {
   }
 });
 
-setTimeout(() => { AddTerminalLine("Booting OS..."); }, 100);
-setTimeout(() => { AddTerminalLine("Loading modules..."); }, 300);
-setTimeout(() => { AddTerminalLine("Starting services..."); }, 500);
-setTimeout(() => { AddTerminalLine("System ready."); }, 700);
+function BootSequence(){
+    setTimeout(() => { AddTerminalLine("Booting OS..."); }, 100);
+    setTimeout(() => { AddTerminalLine("Loading modules..."); }, 300);
+    setTimeout(() => { AddTerminalLine("Starting services..."); }, 500);
+    setTimeout(() => { AddTerminalLine("System ready."); }, 700);
 
-setTimeout(()=> {AddTerminalLine(" _____ ____  ____  ");}, 900);
-setTimeout(()=> {AddTerminalLine("|_   _/ ___||  _ \\ ");}, 975);
-setTimeout(()=> {AddTerminalLine("  | | \\___ \\| |_) |");}, 1100);
-setTimeout(()=> {AddTerminalLine("  | |  ___) |  _ < ");}, 1240);
-setTimeout(()=> {AddTerminalLine("  |_| |____/|_| \\_\\");}, 1334);
-
-setTimeout(() => { RunCommand("player"); }, 2000);
+    setTimeout(()=> {AddTerminalLine(" _____ ____  ____  ");}, 900);
+    setTimeout(()=> {AddTerminalLine("|_   _/ ___||  _ \\ ");}, 1100);
+    setTimeout(()=> {AddTerminalLine("  | | \\___ \\| |_) |");}, 1300);
+    setTimeout(()=> {AddTerminalLine("  | |  ___) |  _ < ");}, 1440);
+    setTimeout(()=> {AddTerminalLine("  |_| |____/|_| \\_\\");}, 1534);
+}
+// setTimeout(() => { RunCommand("player"); }, 2000);
 //setTimeout(() => { RunCommand("cd albums"); }, 2010);
 //setTimeout(() => { RunCommand("cd carrierwave"); },2020); 
 //setTimeout(() => { RunCommand("txtview ABOUT.txt"); }, 2030);
@@ -90,9 +91,9 @@ commandInput.addEventListener('keydown', (e) => {
     }
 });
 
+BootSequence();
 SetupVolume();
 
-//setTimeout(() => { RunCommand("imgview artwork.jpg"); }, 1100);
 // generate random number between two inputs
 function getRandomInt(min, max) {
   min = Math.ceil(min);
