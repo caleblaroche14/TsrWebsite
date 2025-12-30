@@ -63,7 +63,7 @@ setTimeout(()=> {AddTerminalLine("  |_| |____/|_| \\_\\");}, 1334);
 //setTimeout(() => { RunCommand("cd music"); }, 2000);
 //setTimeout(() => { RunCommand("cd albums"); }, 2010);
 //setTimeout(() => { RunCommand("cd carrierwave"); },2020);
-//setTimeout(() => { RunCommand("imgview artwork.jpg"); }, 2030);
+//setTimeout(() => { RunCommand("txtview ABOUT.txt"); }, 2030);
 
 // add eventlistener for input on up arrow that fills the input with the last command
 commandInput.addEventListener('keydown', (e) => {

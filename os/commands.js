@@ -270,6 +270,47 @@ const commands = [
 
       return `Downloading file: ${target}`;
     }
+  },
+  {
+    command: "TXTVIEW",
+    description: "View text file (with file name)",
+    boxWrap: false,
+    execute(args) {
+      const textDisplay = document.getElementById("text-display");
+      const displayedText = document.getElementById("displayed-text");
+
+      if (!args || args.length === 0) return "Please specify a text file name.";
+
+      const target = args[0];
+      const currentDir = GetCurrentDirectory(); 
+      if (!currentDir || !currentDir.children) {
+        return `The system cannot find the path specified: ${target}`;
+      }
+
+      const matchKey = Object.keys(currentDir.children)
+        .find(k => k.toLowerCase() === target.toLowerCase());
+
+      if (!matchKey) return `The system cannot find the file specified: ${target}`;
+      const fileNode = currentDir.children[matchKey];
+
+      console.log(fileNode.type);
+      if (!fileNode.content) return `${target} has no viewable text content.`;
+
+      displayedText.innerHTML = fileNode.content || 'No Text Available.';
+      textDisplay.classList.remove("hidden");
+
+      // add an event listener to hide the text when "q" is pressed
+      function hideTextOnQ(event) {
+        if (event.key.toLowerCase() === 'q') {
+          textDisplay.classList.add("hidden");
+          displayedText.textContent = '';
+          removeEventListener('keydown', hideTextOnQ);
+        }
+      }
+      addEventListener('keydown', hideTextOnQ);
+
+      return `Displaying text file: ${target}`;
+    }
   }
 ];
 
