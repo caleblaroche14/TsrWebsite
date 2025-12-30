@@ -42,6 +42,41 @@ const filesystem =
                             "MEMTEST.EXE": { "id": "C:/DOS/MEMTEST.EXE", "type": "file", "tags": ["utility","diagnostic"], "content": "Memory test utility" }
                         }
                     },
+                    "MUSIC": {
+                        "id": "C:/MUSIC",
+                        "type": "directory",
+                        "tags": ["audio","media"],
+                        "children": {
+                            "ALBUMS":{
+                                "id": "C:/MUSIC/ALBUMS",
+                                "type": "directory",
+                                "children": {
+                                    "CarrierWave": {
+                                        "id": "C:/MUSIC/ALBUMS/CarrierWave",
+                                        "type": "directory",
+                                        "children": {
+                                            "Artwork.jpg": { "id": "C:/MUSIC/ALBUMS/CarrierWave/Artwork.jpg", "artist": "TSR", "type": "file", "tags": ["image","album"], "content": "(jpeg image)", "filepath": '/assets/music/albums/CarrierWave/tsr_cover_v2.jpg', 'album': 'Carrier Wave' },
+                                            "Dreaming.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/Dreaming.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_Dreaming_Mastered.mp3', 'album': 'Carrier Wave' },
+                                            "Encounter.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/Encounter.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_Encounter_Mastered.mp3', 'album': 'Carrier Wave' },
+                                            "Engage.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/Engage.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_Engage_Mastered.mp3', 'album': 'Carrier Wave' },
+                                            "June.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/June.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_June_Mastered.mp3', 'album': 'Carrier Wave' },
+                                            "LettingGo.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/LettingGo.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_LettingGo_Mastered.mp3', 'album': 'Carrier Wave' },
+                                            "LightSpeed.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/LightSpeed.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_LightSpeed_Mastered.mp3', 'album': 'Carrier Wave' },
+                                            "LockedIn.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/LockedIn.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_LockedIn_Mastered.mp3', 'album': 'Carrier Wave' },
+                                            "Pilot.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/Pilot.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_Pilot_Mastered.mp3', 'album': 'Carrier Wave' },
+                                            "Ride.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/Ride.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_Ride_Mastered.mp3', 'album': 'Carrier Wave' },
+                                            "Skyline.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/Skyline.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_Skyline_Mastered.mp3', 'album': 'Carrier Wave' },
+                                            "Soul.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/Soul.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_Soul_Mastered.mp3', 'album': 'Carrier Wave' },
+                                            "Stray.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/Stray.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_Stray_Mastered.mp3', 'album': 'Carrier Wave' },
+                                            "Transmission.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/Transmission.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_Transmission_Mastered.mp3', 'album': 'Carrier Wave' },
+                                            "TwoThree.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/TwoThree.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_TwoThree_Mastered.mp3', 'album': 'Carrier Wave' },
+                                            "Waiting.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/Waiting.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_Waiting_Mastered.mp3' }, 'album': 'Carrier Wave',  
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
                     "GAMES": {
                         "id": "C:/GAMES",
                         "type": "directory",
@@ -116,7 +151,22 @@ const filesystem =
                             "CONTACTS.TXT": { "id": "C:/STRANGER/CONTACTS.TXT", "type": "file", "tags": ["personal","contacts"], "content": "Kasey - 555-0101\nBoss - 555-0202\n" },
                             "SHOPLIST.TXT": { "id": "C:/STRANGER/SHOPLIST.TXT", "type": "file", "tags": ["personal","todo"], "content": "Milk\nPads\nCable ties\n" },
                             "MEDS.TXT": { "id": "C:/STRANGER/MEDS.TXT", "type": "file", "tags": ["personal"], "content": "Aspirin - 20 tabs" },
-                            "EMPLOYER.DAT": { "id": "C:/STRANGER/EMPLOYER.DAT", "type": "file", "tags": ["work"], "content": "Pierworks Co. - shift records" }
+                            "EMPLOYER.DAT": { "id": "C:/STRANGER/EMPLOYER.DAT", "type": "file", "tags": ["work"], "content": "Pierworks Co. - shift records" },
+                            "MEETING-PLACES": {
+                                "id": "C:/STRANGER/MEETING-PLACES",
+                                "type": "directory",
+                                "children": {
+                                    "Cafe.BAR": { "id": "C:/STRANGER/MEETING-PLACES/Cafe.BAR", "type": "file", "tags": ["location"], "content": "Downtown cafe and bar" },
+                                    "Docks.YRD": { "id": "C:/STRANGER/MEETING-PLACES/Docks.YRD", "type": "file", "tags": ["location"], "content": "Old shipping docks yard" },
+                                    "LOCKED":{
+                                        "id": "C:/STRANGER/MEETING-PLACES/LOCKED",
+                                        "type": "directory",
+                                        "children": {
+                                            "Secret.SPT": { "id": "C:/STRANGER/MEETING-PLACES/LOCKED/Secret.SPT", "type": "file", "tags": ["location","secret"], "content": "Top secret meeting spot" }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     },
                     "DOCS": {

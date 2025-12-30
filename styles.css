@@ -164,3 +164,88 @@ body, html {
     0%, 50% { opacity: 1; }
     51%, 100% { opacity: 0; }
 }
+
+/* music player */
+#player {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 60%;
+    width: 60%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 2px solid #555;
+    border-radius: 8px;
+    color: white;
+    font-family: DOS, monospace;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    align-items: left;
+}
+
+
+#song-list{
+    height: 80%;
+    width: 100%;
+    overflow-y: auto;
+    margin-top: 10px;
+    padding-bottom: 20px;
+}
+
+#help-flex{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.player-tile{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: center;
+}
+
+#now-playing{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: left;
+    margin-bottom: 20px;
+    background-color: rgb(69, 69, 69);
+    padding: 5px;
+}
+
+.active{
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    animation: blink .75s step-end infinite; 
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }  
+}
+
+.hidden{
+    display: none !important;
+}
+
+/* loading screen effects */
+#loading{
+        position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 60%;
+    width: 60%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 2px solid #555;
+    border-radius: 8px;
+    color: white;
+    font-family: DOS, monospace;
+    padding: 10px;
+}

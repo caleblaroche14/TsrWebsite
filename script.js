@@ -1,5 +1,6 @@
 
 var dir = "C:";
+var programActive = false;
 
 function AddTerminalLine(data){
     const terminalContent = document.getElementById("terminal-window");
@@ -48,3 +49,10 @@ setTimeout(() => { AddTerminalLine("Booting OS..."); }, 100);
 setTimeout(() => { AddTerminalLine("Loading modules..."); }, 300);
 setTimeout(() => { AddTerminalLine("Starting services..."); }, 500);
 setTimeout(() => { AddTerminalLine("System ready."); }, 700);
+
+// generate random number between two inputs
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+}

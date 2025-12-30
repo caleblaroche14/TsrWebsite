@@ -7,16 +7,37 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <audio id="audio" src=""></audio>
     <div class="computer-screen terminal-overlay">
       <div class="terminal">
         <div id="terminal-window">
         </div>
         <div class="terminal-input">
             <div id="directory"></div> 
-            <input id="text-input" type="text" id="user-input" autofocus />
+            <input id="text-input" type="text" id="user-input" autocomplete="off" autofocus />
             <div class="cursor"></div>
         </div>
       </div>
+      <div id="player" class="hidden">
+        <p>AUDIO PLAYER</p>
+        <div id="song-list">
+        </div>
+        <div id="now-playing">
+          <div id="np-title">Title: </div>
+          <div id="np-artist">Artist: </div>
+          <div id="np-album">Album: </div>
+          <div id="np-time"> // </div>
+        </div>
+        <div id="help-flex">
+          <div class="player-tile"><a>[Space]:</a> <a></a> Pause/Play</a></div>
+          <div class="player-tile"><a>[N]:</a> <a></a> Next</a></div>
+          <div class="player-tile"><a>[P]:</a> <a></a> Previous</a></div>
+          <div class="player-tile"><a></a>[Q]</a> <a></a> Quit</a></div>
+          <div class="player-tile"><a></a>[Arrows]</a> <a></a> Select Song</a></div>
+        </div>
+      </div>
+
+      <div id="loading" class="hidden">Loading...</div>
     </div>
 </body>
 <script type="text/javascript" src="os/filesystem.js"></script>
