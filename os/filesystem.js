@@ -55,7 +55,7 @@ const filesystem =
                                         "id": "C:/MUSIC/ALBUMS/CarrierWave",
                                         "type": "directory",
                                         "children": {
-                                            "Artwork.jpg": { "id": "C:/MUSIC/ALBUMS/CarrierWave/Artwork.jpg", "artist": "TSR", "type": "file", "tags": ["image","album"], "content": "(jpeg image)", "filepath": '/assets/music/albums/CarrierWave/tsr_cover_v2.jpg', 'album': 'Carrier Wave' },
+                                            "Artwork.jpg": { "id": "C:/MUSIC/ALBUMS/CarrierWave/Artwork.jpg", "artist": "TSR", "type": "file", "tags": ["image","album"], "content": "(jpeg image)", "filepath": '/assets/music/albums/CarrierWave/tsr1_cover_v2.png', 'album': 'Carrier Wave' },
                                             "Dreaming.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/Dreaming.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_Dreaming_Mastered.mp3', 'album': 'Carrier Wave' },
                                             "Encounter.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/Encounter.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_Encounter_Mastered.mp3', 'album': 'Carrier Wave' },
                                             "Engage.mp3": { "id": "C:/MUSIC/ALBUMS/CarrierWave/Engage.mp3", "artist": "TSR","type": "file", "tags": ["audio","music"], "content": "(binary audio data)", "filepath": '/assets/music/albums/CarrierWave/944_Engage_Mastered.mp3', 'album': 'Carrier Wave' },

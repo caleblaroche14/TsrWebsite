@@ -50,6 +50,32 @@ setTimeout(() => { AddTerminalLine("Loading modules..."); }, 300);
 setTimeout(() => { AddTerminalLine("Starting services..."); }, 500);
 setTimeout(() => { AddTerminalLine("System ready."); }, 700);
 
+setTimeout(()=> {AddTerminalLine("      _____                    _____                    _____          ");}, 900);
+setTimeout(()=> {AddTerminalLine("     /\    \                  /\    \                  /\    \         ");}, 900);
+setTimeout(()=> {AddTerminalLine("    /::\    \                /::\    \                /::\    \        ");}, 900);
+setTimeout(()=> {AddTerminalLine("    \:::\    \              /::::\    \              /::::\    \       ");}, 900);
+setTimeout(()=> {AddTerminalLine("     \:::\    \            /::::::\    \            /::::::\    \      ");}, 900);
+setTimeout(()=> {AddTerminalLine("      \:::\    \          /:::/\:::\    \          /:::/\:::\    \     ");}, 900);
+setTimeout(()=> {AddTerminalLine("       \:::\    \        /:::/__\:::\    \        /:::/__\:::\    \    ");}, 900);
+setTimeout(()=> {AddTerminalLine("       /::::\    \       \:::\   \:::\    \      /::::\   \:::\    \   ");}, 900);
+setTimeout(()=> {AddTerminalLine("      /::::::\    \    ___\:::\   \:::\    \    /::::::\   \:::\    \  ");}, 900);
+setTimeout(()=> {AddTerminalLine("     /:::/\:::\    \  /\   \:::\   \:::\    \  /:::/\:::\   \:::\____\ ");}, 900);
+setTimeout(()=> {AddTerminalLine("    /:::/  \:::\____\/::\   \:::\   \:::\____\/:::/  \:::\   \:::|    |");}, 900);
+setTimeout(()=> {AddTerminalLine("   /:::/    \::/    /\:::\   \:::\   \::/    /\::/   |::::\  /:::|____|");}, 900);
+setTimeout(()=> {AddTerminalLine("  /:::/    / \/____/  \:::\   \:::\   \/____/  \/____|:::::\/:::/    / ");}, 900);
+setTimeout(()=> {AddTerminalLine(" /:::/    /            \:::\   \:::\    \            |:::::::::/    /  ");}, 900);
+setTimeout(()=> {AddTerminalLine("/:::/    /              \:::\   \:::\____\           |::|\::::/    /   ");}, 900);
+setTimeout(()=> {AddTerminalLine("\::/    /                \:::\  /:::/    /           |::| \::/____/    ");}, 900);
+setTimeout(()=> {AddTerminalLine(" \/____/                  \:::\/:::/    /            |::|  ~|          ");}, 900);
+setTimeout(()=> {AddTerminalLine("                           \::::::/    /             |::|   |          ");}, 900);
+setTimeout(()=> {AddTerminalLine("                            \::::/    /              \::|   |          ");}, 900);
+setTimeout(()=> {AddTerminalLine("                             \::/    /                \:|   |          ");}, 900);
+setTimeout(()=> {AddTerminalLine("                              \/____/                  \|___|          ");}, 900);
+setTimeout(()=> {AddTerminalLine("                                                                       ");}, 900);
+//setTimeout(() => { RunCommand("cd music"); }, 800);
+//setTimeout(() => { RunCommand("cd albums"); }, 900);
+//setTimeout(() => { RunCommand("cd carrierwave"); },1000);
+//setTimeout(() => { RunCommand("imgview artwork.jpg"); }, 1100);
 // generate random number between two inputs
 function getRandomInt(min, max) {
   min = Math.ceil(min);

@@ -182,6 +182,46 @@ const commands = [
       AddTerminalLine("FREE\t\t\t8192 KB\t\t\t8192 KB\t\t\t0 KB");
       AddTerminalLine("TOTAL\t\t\t10816 KB\t\t9664 KB\t\t\t1152 KB");
     }
+  },
+  {
+    command: "IMGVIEW",
+    description: "View image file (with file name)",
+    boxWrap: false,
+    execute(args) {
+      if (!args || args.length === 0) return "Please specify an image file name.";
+
+      const target = args[0];
+      const currentDir = GetCurrentDirectory();
+      if (!currentDir || !currentDir.children) {
+        return `The system cannot find the path specified: ${target}`;
+      }
+
+      const matchKey = Object.keys(currentDir.children)
+        .find(k => k.toLowerCase() === target.toLowerCase());
+
+      if (!matchKey) return `The system cannot find the file specified: ${target}`;
+      const fileNode = currentDir.children[matchKey];
+      if (fileNode.type !== 'file' || !fileNode.filepath) return `${target} is not a valid image file.`;
+      
+      const imageDisplay = document.getElementById("image-display");
+      const displayedImage = document.getElementById("displayed-image");
+      displayedImage.src = fileNode.filepath;
+      imageDisplay.classList.remove("hidden");
+
+      console.log('Displaying image:', fileNode.filepath);
+
+      // add an event listener to hide the image when "q" is pressed
+      function hideImageOnQ(event) {
+        if (event.key.toLowerCase() === 'q') {
+          imageDisplay.classList.add("hidden");
+          displayedImage.src = '';
+          removeEventListener('keydown', hideImageOnQ);
+        }
+      }
+      addEventListener('keydown', hideImageOnQ);
+
+      return `Displaying image: ${target}`;
+    }
   }
 ];
 
