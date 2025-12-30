@@ -215,9 +215,9 @@ body, html {
 
 
 #song-list{
-    height: 80%;
+    height: 250px;
     width: 100%;
-    overflow-y: auto;
+    overflow-y: none;
     margin-top: 10px;
     padding-bottom: 20px;
 }
@@ -438,9 +438,11 @@ body, html {
 
 .vis-bar{
     flex: 1;
-    height: 2px;
-    min-height: 2px;
-    max-height: 150px;
+    height: 0;
+    min-height: 0;
+    max-height: 120px;
+    background-color: #AAAAAA;
+    border: 2px solid #000;
 }
 
 #visualizer{
@@ -449,8 +451,9 @@ body, html {
     justify-content: center;
     align-items: flex-end;
     width: 100%;
-    height: 150px;
-    gap: 1px;
-    background-color: rgba(0, 0, 0, 0.3);
+    height: 120px;
+    gap: 8px;
+    background-color: #000000;
     padding: 10px;
+    border: 2px solid #AAAAAA;
 }

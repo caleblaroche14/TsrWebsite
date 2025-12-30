@@ -138,6 +138,16 @@ const commands = [
       });
       player.addSongs(files);
 
+      let songdivs = document.getElementsByClassName("song");
+      for (let i = 0; i < songdivs.length; i++) {
+        // show only the first 8 songs to avoid scolling
+        if (i < 8) {
+          songdivs[i].classList.remove("hidden");
+        } else {
+          songdivs[i].classList.add("hidden");
+        }
+      }
+
       player.keyHandler = function(event) {
         const audioEl = player.audio || document.getElementById('audio');
         if (event.key === " ") {
@@ -225,7 +235,6 @@ const commands = [
       displayedImage.src = fileNode.filepath;
       imageDisplay.classList.remove("hidden");
 
-      console.log(imgblocks);
       for (let i = 0; i < imgblocks.length; i++) {
         setTimeout(() => {
           imgblocks[i].classList.add("opaque");
@@ -301,7 +310,6 @@ const commands = [
       if (!matchKey) return `The system cannot find the file specified: ${target}`;
       const fileNode = currentDir.children[matchKey];
 
-      console.log(fileNode.type);
       if (!fileNode.content) return `${target} has no viewable text content.`;
 
       displayedText.innerHTML = fileNode.content || 'No Text Available.';
@@ -454,7 +462,6 @@ function traverseNode(node, { onFile, onDir, path = '', depth = 0, shouldStop } 
 }
 
 function AddSongsToPlayer(songs){
-  console.log(songs);
   const playerList = document.getElementById("song-list");
   
   songs.forEach(song => {
@@ -527,7 +534,7 @@ const player = {
     this.audio.play()
       .then(() => { this.paused = false; this.highlightCurrent(this.currentIndex); })
       .catch(err => console.warn('Play failed:', err));
-    console.log(this.playlist[target]);
+
     this.artistdiv.textContent = 'Artist: ' + (this.playlist[target].node.artist || 'Unknown');
     this.titlediv.textContent = 'Title: ' + this.playlist[target].name.replace(/\.mp3$/i, '');
     this.albumdiv.textContent = 'Album: ' + (this.playlist[target].node.album || 'Unknown');
@@ -543,39 +550,36 @@ const player = {
       }
     }, 1000);
 
-    // Start visualizer animation loop
+    // Start visualizer animation loop - DOS style
     const dataArray = new Uint8Array(this.analyser.frequencyBinCount);
     const visBars = document.getElementsByClassName('vis-bar');
-    const smoothedData = new Array(visBars.length).fill(0);
-    const smoothingFactor = 0.7;
+    
+    let lastUpdate = 0;
+    const updateInterval = 100; // Update every 100ms (10fps) - DOS style
 
-    const renderFrame = () => {
+    const renderFrame = (timestamp) => {
       this.renderFrameId = requestAnimationFrame(renderFrame);
+      
+      // Throttle updates to 10fps like DOS would
+      if (timestamp - lastUpdate < updateInterval) return;
+      lastUpdate = timestamp;
+      
       this.analyser.getByteFrequencyData(dataArray);
       
-      // Skew towards higher frequencies: use exponential mapping
-      // Limit to 18 kHz (bin ~837 at 44.1 kHz sample rate, fftSize 2048)
+      // Simple linear frequency distribution (no exponential)
       const maxFreqBin = Math.floor((18000 / (this.audioCtx.sampleRate / this.analyser.fftSize)));
       const freqRange = maxFreqBin;
+      const barsPerFreq = freqRange / visBars.length;
       
       for (let i = 0; i < visBars.length; i++) {
-        // Exponential mapping: lower bars get less range, higher bars get more
-        const normalizedIndex = i / visBars.length;
-        const exponentialIndex = Math.pow(normalizedIndex, 1.5); // Skew towards end
-        const freqIndex = Math.floor(exponentialIndex * freqRange);
-        
+        const freqIndex = Math.floor(i * barsPerFreq);
         let scale = dataArray[freqIndex] / 255;
         
-        // Apply smoothing to reduce flickering
-        smoothedData[i] = smoothedData[i] * smoothingFactor + scale * (1 - smoothingFactor);
+        // Quantize to 8 levels (chunky like DOS)
+        scale = Math.floor(scale * 8) / 8;
         
-        // Color gradient: blue (240°) → green (120°) → red (0°)
-        const hue = 240 - (normalizedIndex * 240); // 240° down to 0°
-        const opacity = Math.max(0.2, smoothedData[i]); // Range from 0.2 to 1
-        const color = `hsla(${hue}, 100%, 50%, ${opacity})`;
-        
-        visBars[i].style.height = `${smoothedData[i] * 100}%`;
-        visBars[i].style.backgroundColor = color;
+        visBars[i].style.height = `${scale * 100}%`;
+        visBars[i].style.backgroundColor = '#AAAAAA';
       }
     };
     renderFrame();
@@ -642,6 +646,28 @@ const player = {
     if (index < 0 || index >= this.playlist.length) return;
     this.selectedSongIndex = index;
     this.highlightCurrent(index);
+
+    // if we've going over a modulo of 8, hide the fisrt 8 songs and show the next 8
+    // if we're going back over a modulo of 8, hide the last 8 songs and show the previous 8
+    let songdivs = document.getElementsByClassName("song");
+    for (let i = 0; i < songdivs.length; i++) {
+      if (i >= index - (index % 8) && i < index - (index % 8) + 8) {
+        let moreunder = index + (8 - (index % 8));
+        let moreover = index - (index % 8) - 1;
+        if (moreunder){
+          // append ... div if there are more songs under that scrolls when its the selected song
+          if (moreunder < songdivs.length && !document.getElementById("more-under")) {
+            let moreunderdiv = document.createElement("div");
+            moreunderdiv.id = "more-under";
+            moreunderdiv.textContent = "...";
+            songdivs[moreunder - 1].after(moreunderdiv);
+          }
+        }
+        songdivs[i].classList.remove("hidden");
+      } else {
+        songdivs[i].classList.add("hidden");
+      }
+    }
   },
 
   close() {

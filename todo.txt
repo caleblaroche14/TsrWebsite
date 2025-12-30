@@ -13,7 +13,7 @@ IDEAS:
         - have a way to inspect it so that cambria tries to talk to you once you've interacted with it 
 
 PLAYER:
-    - audio visualizer
+   
    
     
 
@@ -22,4 +22,5 @@ DONE
 x - download command
 x - command history
 x - chunk images in loading
-x  - volume on player
+x - volume on player
+x - audio visualizer
