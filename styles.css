@@ -6,6 +6,11 @@
   font-display: swap;
 }
 
+/* hide all scrollbars */
+::-webkit-scrollbar {
+    display: none;
+}
+
 body, html {
     overflow: hidden;
     background-color: black; 
@@ -204,8 +209,8 @@ body, html {
     padding: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: top;
-    align-items: left;
+    justify-content: center;
+    align-items: center;
 }
 
 
@@ -220,7 +225,8 @@ body, html {
 #help-flex{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    justify-content: space-around;
     align-items: center;
     width: 100%;
 }
@@ -230,10 +236,14 @@ body, html {
     flex-direction: column;
     justify-content: left;
     align-items: center;
+    background-color: rgb(40, 40, 40);
+    padding: 2px;
+    border-radius: 4px;
 }
 
 #now-playing{
     display: flex;
+    width: 100%;
     flex-direction: column;
     justify-content: left;
     align-items: left;
@@ -312,10 +322,7 @@ body, html {
     display: none !important;
 }
 
-.opaque{
-    transition: .3s;
-    opacity: 0 !important;
-}
+
 
 /* loading screen effects */
 #loading{
@@ -368,11 +375,14 @@ body, html {
     background-position: center !important;
 }
 
-
+.opaque{
+    transition: .1s;
+    opacity: 0 !important;
+}
 
 .notopaque{
-    opacity: 1 !important;
-    transition: 0s;
+    opacity: .07 !important;
+    transition: .1s;
 }
 
 #scan-display{
@@ -400,4 +410,47 @@ body, html {
     overflow-y: auto;
     margin-top: 10px;
     padding-bottom: 20px;
+}
+
+.voltile{
+    height: 20px;
+}
+
+#volmeter{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: start;
+    width: 100%;
+}
+
+#volume{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.border-vol{
+    font-size: 25px;
+}
+
+.vis-bar{
+    flex: 1;
+    height: 2px;
+    min-height: 2px;
+    max-height: 150px;
+}
+
+#visualizer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    width: 100%;
+    height: 150px;
+    gap: 1px;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 10px;
 }

@@ -2,22 +2,35 @@ let terminalpgimg = document.getElementById("terminalbg-img");
 let cambriaMode = false;
 
 function randomScreenFlicker(){
-    setTimeout(() => {toggleDivVisibility(terminalpgimg)},500);
-}
-
-function toggleDivVisibility(div,img){
     if (!cambriaMode){return};
-    div.classList.add('opaque');
-    div.classList.remove('notopaque');
+    console.log("flicker"); 
+    terminalpgimg.classList.add('notopaque');
+    terminalpgimg.classList.remove('opaque');
+
     setTimeout(() => {
-        div.classList.remove('opaque');
-        div.classList.add('notopaque');
-    },getRandomInt(50,4000));
+        terminalpgimg.classList.add('opaque');
+        terminalpgimg.classList.remove('notopaque');
+
+        // small change of a few mere fast flickers
+        let extraFlickerChance = Math.random();
+        if (extraFlickerChance < .25){
+            setTimeout(() => {
+                terminalpgimg.classList.add('notopaque');
+                terminalpgimg.classList.remove('opaque');
+                setTimeout(() => {
+                    terminalpgimg.classList.add('opaque');
+                    terminalpgimg.classList.remove('notopaque');
+                }, 100);
+            }, 100);
+        }
+    }, 100);
+
 }
 
 setInterval(() => {
     let flickerChance = Math.random();
-    if (flickerChance < 0.005){ // 0.05% chance every 10ms
+    // flicker very rarely
+    if (flickerChance < 0.02){
         randomScreenFlicker();
     }
-}, 10);
+}, 100);

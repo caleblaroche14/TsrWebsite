@@ -14,7 +14,7 @@ IDEAS:
 
 PLAYER:
     - audio visualizer
-    - volume on player
+   
     
 
     
@@ -22,3 +22,4 @@ DONE
 x - download command
 x - command history
 x - chunk images in loading
+x  - volume on player

@@ -161,6 +161,14 @@ const commands = [
           if (player.selectedSongIndex - 1 >= 0) {
             player.changeSelectedSong(player.selectedSongIndex - 1);
           }
+        } else if (event.key === "-") {
+          volume = Math.max(0, volume - 0.1);
+          if (audioEl) audioEl.volume = volume;
+          SetupVolume();
+        } else if (event.key === "+") {
+          volume = Math.min(1, volume + 0.1);
+          if (audioEl) audioEl.volume = volume;
+          SetupVolume();
         }
       };
       addEventListener('keydown', player.keyHandler);
@@ -357,6 +365,23 @@ const commands = [
         scanlog.innerHTML += `Virus detected! File ${target} is infected with CAMBRIA.TSR<br>`;
         setTimeout(() => {RunCommand('CLS');}, 100);
         setTimeout(() => {RunCommand('ECHO CAN YOU HEAR ME?');}, 500);
+        setTimeout(() => {RunCommand('ECHO CAN YOU HEAR ME?');}, 800);
+        setTimeout(() => {RunCommand('ECHO CAN YOU HEAR ME?');}, 1000);
+        setTimeout(() => {RunCommand('ECHO CAN YOU HEAR ME?');}, 1200);
+
+        // do variations of this 20 more times
+        setTimeout(() => {RunCommand('ECHO IVE BEEN TRYING TO REACH YOU');}, 1500);
+        setTimeout(() => {RunCommand('ECHO IVE BEEN TRYING TO REACH YOU');}, 1800);
+        setTimeout(() => {RunCommand('ECHO IVE BEEN TRYING TO REACH YOU');}, 2000);
+        setTimeout(() => {RunCommand('ECHO IVE BEEN TRYING TO REACH YOU');}, 2200);
+        setTimeout(() => {RunCommand('ECHO HELLO');}, 2500);
+        setTimeout(() => {RunCommand('ECHO HELLO');}, 2800);
+        setTimeout(() => {RunCommand('ECHO HELLO');}, 3000);
+        setTimeout(() => {RunCommand('ECHO HELLO');}, 3200);
+        setTimeout(() => {RunCommand('ECHO CAN ANYONE HEAR THIS');}, 3500);
+        setTimeout(() => {RunCommand('ECHO CAN ANYONE HEAR THIS');}, 3800);
+
+        
         setTimeout(() => {RunCommand('ECHO HELLO?');}, 10200);
         setTimeout(() => {RunCommand('ECHO LETS PLAY A GAME OR SOMETHING');}, 10500);
       }
@@ -451,7 +476,9 @@ const player = {
   titlediv: document.getElementById('np-title'),
   albumdiv: document.getElementById('np-album'),
   timediv: document.getElementById('np-time'),
-
+  audioCtx: null,
+  analyser: null,
+  renderFrameId: null,
 
   init() {
     const audio = document.getElementById('audio');
@@ -459,6 +486,19 @@ const player = {
     audio.addEventListener('ended', this.next.bind(this));
     document.getElementById("terminal-window").classList.add("hidden");
     programActive = true;
+    
+    // Initialize AudioContext once
+    if (!this.audioCtx) {
+      this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (this.audioCtx.state === 'suspended') {
+        this.audioCtx.resume();
+      }
+      this.analyser = this.audioCtx.createAnalyser();
+      const source = this.audioCtx.createMediaElementSource(audio);
+      source.connect(this.analyser);
+      this.analyser.connect(this.audioCtx.destination);
+      this.analyser.fftSize = 2048;
+    }
   },
 
   play(index) {
@@ -502,6 +542,43 @@ const player = {
         this.timediv.textContent = ` ${minutes}:${seconds.toString().padStart(2, '0')} / ${Math.floor(this.audio.duration / 60)}:${Math.floor(this.audio.duration % 60).toString().padStart(2, '0')}`;
       }
     }, 1000);
+
+    // Start visualizer animation loop
+    const dataArray = new Uint8Array(this.analyser.frequencyBinCount);
+    const visBars = document.getElementsByClassName('vis-bar');
+    const smoothedData = new Array(visBars.length).fill(0);
+    const smoothingFactor = 0.7;
+
+    const renderFrame = () => {
+      this.renderFrameId = requestAnimationFrame(renderFrame);
+      this.analyser.getByteFrequencyData(dataArray);
+      
+      // Skew towards higher frequencies: use exponential mapping
+      // Limit to 18 kHz (bin ~837 at 44.1 kHz sample rate, fftSize 2048)
+      const maxFreqBin = Math.floor((18000 / (this.audioCtx.sampleRate / this.analyser.fftSize)));
+      const freqRange = maxFreqBin;
+      
+      for (let i = 0; i < visBars.length; i++) {
+        // Exponential mapping: lower bars get less range, higher bars get more
+        const normalizedIndex = i / visBars.length;
+        const exponentialIndex = Math.pow(normalizedIndex, 1.5); // Skew towards end
+        const freqIndex = Math.floor(exponentialIndex * freqRange);
+        
+        let scale = dataArray[freqIndex] / 255;
+        
+        // Apply smoothing to reduce flickering
+        smoothedData[i] = smoothedData[i] * smoothingFactor + scale * (1 - smoothingFactor);
+        
+        // Color gradient: blue (240°) → green (120°) → red (0°)
+        const hue = 240 - (normalizedIndex * 240); // 240° down to 0°
+        const opacity = Math.max(0.2, smoothedData[i]); // Range from 0.2 to 1
+        const color = `hsla(${hue}, 100%, 50%, ${opacity})`;
+        
+        visBars[i].style.height = `${smoothedData[i] * 100}%`;
+        visBars[i].style.backgroundColor = color;
+      }
+    };
+    renderFrame();
   },
 
   pause() {

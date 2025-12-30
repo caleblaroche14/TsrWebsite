@@ -3,6 +3,7 @@ var dir = "C:";
 var programActive = false;
 var commandHistory = [];
 var commandIdx = -1;
+var volume = 0.7; // default volume at 70%
 
 function AddTerminalLine(data){
     const terminalContent = document.getElementById("terminal-window");
@@ -60,9 +61,9 @@ setTimeout(()=> {AddTerminalLine("  | | \\___ \\| |_) |");}, 1100);
 setTimeout(()=> {AddTerminalLine("  | |  ___) |  _ < ");}, 1240);
 setTimeout(()=> {AddTerminalLine("  |_| |____/|_| \\_\\");}, 1334);
 
-//setTimeout(() => { RunCommand("cd music"); }, 2000);
+setTimeout(() => { RunCommand("player"); }, 2000);
 //setTimeout(() => { RunCommand("cd albums"); }, 2010);
-//setTimeout(() => { RunCommand("cd carrierwave"); },2020);
+//setTimeout(() => { RunCommand("cd carrierwave"); },2020); 
 //setTimeout(() => { RunCommand("txtview ABOUT.txt"); }, 2030);
 
 // add eventlistener for input on up arrow that fills the input with the last command
@@ -89,10 +90,25 @@ commandInput.addEventListener('keydown', (e) => {
     }
 });
 
+SetupVolume();
+
 //setTimeout(() => { RunCommand("imgview artwork.jpg"); }, 1100);
 // generate random number between two inputs
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+}
+
+function SetupVolume(){
+    var voltiles = document.getElementsByClassName("voltile");
+    for (let i = 0; i < voltiles.length; i++) {
+            console.log(voltiles[i]);
+        if (volume * 10 > i) {
+            voltiles[i].innerHTML = '▓';
+        }else{
+            voltiles[i].innerHTML = '░';
+        }
+    }
+    
 }
