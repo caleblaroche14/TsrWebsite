@@ -11,7 +11,10 @@ IDEAS:
         - provide alternate path with links (poster on wall?)
     x - have MEM command make it so you see a program running like "Cambria.exe" 
         - have a way to inspect it so that cambria tries to talk to you once you've interacted with it 
-
+    - have a computer you can click to, as well as a poster that you can click
+        - the computer will bring you into the terminal
+        - the poster will bring you to a 'poster like' website that is more clear
+        - a tape deck on the the desk will be the player
 PLAYER:
    
    

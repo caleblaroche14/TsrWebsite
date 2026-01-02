@@ -91,8 +91,36 @@ commandInput.addEventListener('keydown', (e) => {
     }
 });
 
-BootSequence();
-SetupVolume();
+function StartComputer(){
+    let computer = document.getElementById("computer");
+    computer.classList.remove("hidden");
+    programActive = true;
+    BootSequence();
+    SetupVolume();
+}
+
+function ShutDownComputer(){
+    let computer = document.getElementById("computer");
+    computer.classList.add("hidden");
+    programActive = false;
+    const terminalContent = document.getElementById("terminal-window");
+    terminalContent.innerHTML = '';
+    dir = "C:";
+    commandHistory = [];
+    commandIdx = -1;
+}
+
+function OpenPlayerOnly(){
+    let computer = document.getElementById("computer");
+    computer.classList.remove("hidden");
+    programActive = true;
+    RunCommand("player");
+    SetupVolume();
+}
+
+function GoToYoutubeChannel(){
+    window.open("https://www.youtube.com/@TerminateAndStayResident", "_blank");
+}
 
 // generate random number between two inputs
 function getRandomInt(min, max) {

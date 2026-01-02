@@ -8,7 +8,14 @@
 </head>
 <body>
   <audio id="audio" src=""></audio>
-  <div id="computer">
+  <div id="room">
+    <div id="room-container">
+      <div id="poster" onclick="GoToYoutubeChannel()"><img id="posterimg" src="assets/music/albums/CarrierWave/tsr1_cover_v2.png" alt=""></div>
+      <div id="tapedeck" onclick="OpenPlayerOnly()"><img src="assets/images/tape.png" id="computerimg"></div>
+      <div id="computerondesk" onclick="StartComputer()"><img src="assets/images/com.png" id="computerimg"></div>
+    </div>
+  </div>
+  <div id="computer" class="hidden">
     <div class="computer-screen terminal-overlay">
       <div id="terminalbg"></div>
       <div id="terminalbg-img" class="opaque"></div>

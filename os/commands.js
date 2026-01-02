@@ -405,6 +405,14 @@ const commands = [
         scanlog.innerHTML += `File type is not valid for scanning.<br>`;
       }
     }
+  },
+  {
+    command: "EXIT",
+    description: "Exit the terminal",
+    boxWrap: false,
+    execute() {
+      ShutDownComputer();
+    }
   }
 ];
 
