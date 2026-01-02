@@ -4,7 +4,7 @@ CONTACT:
     - Kickstarter website Command
 
 IDEAS: 
-    - better cursor
+    
     - Have the AI (Cambria) try to contact you
         - make it childlike (who are you, will you play games with me, etc.)
     - Do power button once again
@@ -28,3 +28,4 @@ x - have a computer you can click to, as well as a poster that you can click
     x - the computer will bring you into the terminal
     x - the poster will bring you to a 'poster like' website that is more clear
     x - a tape deck on the the desk will be the player
+x - better cursor

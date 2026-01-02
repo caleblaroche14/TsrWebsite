@@ -129,6 +129,12 @@ function StartComputer(){
     programActive = true;
     BootSequence();
     SetupVolume();
+
+    // focus the input box after boot sequence
+    setTimeout(() => {
+        const inputBox = document.getElementById("text-input");
+        inputBox.focus();
+    }, 100);
 }
 
 function ShutDownComputer(){
