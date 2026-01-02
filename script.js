@@ -42,13 +42,45 @@ function RunCommand(inputStr){
 }
 
 const commandInput = document.getElementById('text-input');
+const customCursor = document.getElementById('custom-cursor');
+const directoryElement = document.getElementById('directory');
+
+// Initialize prompt and cursor once DOM is ready
+function initCursor() {
+    directoryElement.textContent = dir + '>';
+    customCursor.style.visibility = 'visible';
+    updateCursorPosition();
+}
+
+// Function to update cursor position
+function updateCursorPosition() {
+    const text = commandInput.value.substring(0, commandInput.selectionStart);
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    context.font = '20px DOS, monospace';
+    
+    const directoryWidth = context.measureText(directoryElement.textContent).width;
+    const textWidth = context.measureText(text).width;
+    
+    customCursor.style.left = `${directoryWidth + textWidth + 8}px`;
+}
+
+commandInput.addEventListener('input', updateCursorPosition);
+commandInput.addEventListener('click', updateCursorPosition);
+commandInput.addEventListener('keyup', updateCursorPosition);
+commandInput.addEventListener('focus', updateCursorPosition);
+
 commandInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     e.preventDefault();
     RunCommand(commandInput.value);
     commandInput.value = '';
+    updateCursorPosition();
   }
 });
+
+// Position cursor correctly on load
+initCursor();
 
 function BootSequence(){
     setTimeout(() => { AddTerminalLine("Booting OS..."); }, 100);
