@@ -12,6 +12,52 @@ const commands = [
     execute() { return commands.map(c => `${c.command} - ${c.description}`).join('\n'); }
   },
   {
+    command: "EMAILLIST",
+    description: "Sign up for our email list [email]",
+    boxWrap: false,
+    execute(args) {
+      if (!args || args.length < 1) {
+        return "Usage: EMAILLIST email@example.com";
+      }
+      
+      const email = args[0];
+      const name = args.slice(1).join(' ').replace(/^"|"$/g, '') || '';
+      
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return "Invalid email format.";
+      }
+      
+      const formId = '1FAIpQLSe-sF-CHypW7ngI3GZIh3Rubv4flTw3bz7mz-QnzQk6ELu5Wg';
+      
+      // Create form data
+      const formData = new FormData();
+      formData.append('entry.1844914415', email);
+      if (name) formData.append('entry.589645032', name);
+      
+      // Log the submission for debugging
+      console.log('Submitting to Google Form:', { email, name });
+      
+      // Submit with no-cors (Google Forms doesn't set proper CORS headers)
+      fetch(`https://docs.google.com/forms/d/e/${formId}/formResponse`, {
+        method: 'POST',
+        body: formData,
+        mode: 'no-cors'
+      })
+      .then(response => {
+        console.log('Form submitted successfully (no-cors mode)');
+        AddTerminalLine("Submitted to email list!");
+      })
+      .catch((err) => {
+        console.error('Fetch error:', err);
+        AddTerminalLine("Request sent (check browser console for details)");
+      });
+      
+      return "Submitting to Google Form...";
+    }
+  },
+  {
     command: "CLS",
     description: "Clear the screen",
     boxWrap: false,

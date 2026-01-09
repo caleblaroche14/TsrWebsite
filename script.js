@@ -4,6 +4,25 @@ var programActive = false;
 var commandHistory = [];
 var commandIdx = -1;
 var volume = 0.7; // default volume at 70%
+let room = document.getElementById("room");
+// setup init page 
+
+
+// the smaller the window, show more to the left of the room 
+
+function updateRoomPosition(){
+    let windowWidth = window.innerWidth;
+    if (windowWidth < 800){
+        room.style.left = "calc(50% - -" + (windowWidth / 3.5) + "px + 100px)";
+    }
+    console.log(windowWidth);;
+}
+
+window.addEventListener("resize", function(){
+    updateRoomPosition();
+});
+updateRoomPosition();
+
 
 function AddTerminalLine(data){
     const terminalContent = document.getElementById("terminal-window");
@@ -107,7 +126,6 @@ commandInput.addEventListener('keydown', (e) => {
             commandIdx--;
             commandInput.value = commandHistory[commandIdx];
         }
-        console.log(commandHistory);
     }
 });
 
@@ -119,7 +137,6 @@ commandInput.addEventListener('keydown', (e) => {
         if (commandHistory.length > 0 && commandIdx < commandHistory.length) {
             commandInput.value = commandHistory[commandIdx];
         }
-        console.log(commandHistory);
     }
 });
 
@@ -170,7 +187,6 @@ function getRandomInt(min, max) {
 function SetupVolume(){
     var voltiles = document.getElementsByClassName("voltile");
     for (let i = 0; i < voltiles.length; i++) {
-            console.log(voltiles[i]);
         if (volume * 10 > i) {
             voltiles[i].innerHTML = '▓';
         }else{
