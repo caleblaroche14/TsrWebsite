@@ -7,8 +7,10 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <canvas id="glitch-canvas"></canvas>
+  <div id="ascii"></div>
   <audio id="audio" src=""></audio>
-  <div id="room">
+  <div id="room" class="roomdesktop">
     <div id="room-container">
       <div class="pagelink" id="poster" onclick="GoToYoutubeChannel()"><img id="posterimg" src="assets/images/page-album.png" alt=""></div>
       <div class="pagelink" id="tapedeck" onclick="OpenPlayerOnly()"><img src="assets/images/page-reeltoreel.png" id="tapedeckimg"></div>
@@ -118,11 +120,13 @@
       <div id="loading" class="hidden">Loading...</div>
     </div>
   </div>
-  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSe-sF-CHypW7ngI3GZIh3Rubv4flTw3bz7mz-QnzQk6ELu5Wg/viewform?embedded=true" width="10" height="10" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+  <iframe id="googleform" src="https://docs.google.com/forms/d/e/1FAIpQLSe-sF-CHypW7ngI3GZIh3Rubv4flTw3bz7mz-QnzQk6ELu5Wg/viewform?embedded=true" width="10" height="10" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
 </body>
 <script type="text/javascript" src="os/filesystem.js"></script>
  <script type="text/javascript" src="os/commands.js"></script>
  <script type="text/javascript" src="os/utilities.js"></script>
  <script type="text/javascript" src="os/cambria.js"></script>
 <script src="script.js"></script>
+ <script type="text/javascript" src="canvas.js"></script>
+ <script type="text/javascript" src="ascii.js"></script>
 </html>

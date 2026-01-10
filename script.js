@@ -12,8 +12,12 @@ let room = document.getElementById("room");
 
 function updateRoomPosition(){
     let windowWidth = window.innerWidth;
-    if (windowWidth < 800){
-        room.style.left = "calc(50% - -" + (windowWidth / 3.5) + "px + 100px)";
+    if (windowWidth < 600){
+        room.classList.add('roommobile');
+        room.classList.remove('roomdesktop');
+    }else{
+        room.classList.add('roomdesktop');
+        room.classList.remove('roommobile');
     }
     console.log(windowWidth);;
 }
