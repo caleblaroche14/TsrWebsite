@@ -7,8 +7,10 @@ var gridlines = [];
 
 var gridlength = screenWidth / 11;
 var gridheight = screenHeight / 35;
-var fillchar = '.'
-if (getRandomInt(0,10) > 4) { fillchar = '_'; } else { fillchar = '.'; }                
+var fillchar = '.' 
+var targetFps = 5;
+var lastFrameTime = 0; 
+addgridline(`Terminte${fillchar}and${fillchar}Stay${fillchar}Resident`)        
 addgridline('CarrierWave');
 addgridline('Engage');
 addgridline('Skyline');
@@ -60,7 +62,15 @@ function updateascii(){
     }
 }
 
-setInterval(updateascii, 300);
+function animate(){
+    let currentTime = performance.now();
+    if (currentTime - lastFrameTime >= (1000 / targetFps)) {
+        updateascii();
+        lastFrameTime = currentTime;
+    }
+    requestAnimationFrame(animate);
+}
+animate();
 
 
 function addtexttoline(line, text){
