@@ -7,24 +7,24 @@ var gridlines = [];
 
 var gridlength = screenWidth / 11;
 var gridheight = screenHeight / 35;
-
-                             
-addgridline('Pilot');
+var fillchar = '.'
+if (getRandomInt(0,10) > 4) { fillchar = '_'; } else { fillchar = '.'; }                
+addgridline('CarrierWave');
 addgridline('Engage');
 addgridline('Skyline');
-addgridline('Light_Speed');
+addgridline(`Light${fillchar}Speed`);
 addgridline('June');
-addgridline('Ride_Scratch');
-addgridline('Letting_Go');
-addgridline('Cambria');
-addgridline('Waiting');
-addgridline('Dreaming');
-addgridline('Two_Three');
-addgridline('Stray');
-addgridline('Locked_In');
-addgridline('Transmission');
-addgridline('In_The_Night');
-addgridline('Encounter');
+addgridline(`Ride${fillchar}Scratch`);
+addgridline(`Letting${fillchar}Go`);
+addgridline(`Cambria`);
+addgridline(`Waiting`);
+addgridline(`Dreaming`);
+addgridline(`Two${fillchar}Three`);
+addgridline(`Stray`);
+addgridline(`Locked${fillchar}In`);
+addgridline(`Transmission`);
+addgridline(`In${fillchar}The${fillchar}Night`);
+addgridline(`Encounter`);
                
                              
                                                                                 
@@ -44,7 +44,7 @@ for (let i = 0; i < gridheight; i++){
     if (grid[i] === undefined){ grid.push([]); }
     
     while (grid[i].length < gridlength) {
-        grid[i].push('_');
+        grid[i].push(fillchar);
     }
     div.innerHTML = grid[i].join('');
 }
@@ -60,7 +60,7 @@ function updateascii(){
     }
 }
 
-setInterval(updateascii, 100);
+setInterval(updateascii, 300);
 
 
 function addtexttoline(line, text){
@@ -78,7 +78,7 @@ function addgridline(text){
         startidx = 0;
     }
     for (let j = 0; j < startidx; j++){
-        grid[grid.length - 1].push('_');
+        grid[grid.length - 1].push(fillchar);
     }
     for (let i = 0; i < text.length; i++){
         grid[grid.length - 1].push(text[i]);
