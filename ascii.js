@@ -16,10 +16,10 @@ addgridline(`${fillchar}${fillchar}##!${fillchar}${fillchar}${fillchar}${fillcha
 addgridline(`${fillchar}${fillchar}!#!${fillchar}${fillchar}${fillchar}${fillchar}!#!${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}!#!${fillchar}${fillchar}#!#${fillchar}${fillchar}`);
 addgridline(`${fillchar}${fillchar}#!!${fillchar}${fillchar}${fillchar}${fillchar}!!##!!${fillchar}${fillchar}${fillchar}${fillchar}#!#!!#!${fillchar}${fillchar}${fillchar}`);
 addgridline(`${fillchar}${fillchar}!!!${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}!!#!!!${fillchar}${fillchar}${fillchar}!!#!#!${fillchar}${fillchar}${fillchar}${fillchar}`);
-addgridline(`${fillchar}${fillchar}!!:${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}!:!${fillchar}${fillchar}!!:${fillchar}:!!${fillchar}${fillchar}${fillchar}`);
-addgridline(`${fillchar}${fillchar}:!:${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}!:!${fillchar}${fillchar}${fillchar}:!:${fillchar}${fillchar}!:!${fillchar}${fillchar}`);
-addgridline(`${fillchar}${fillchar}${fillchar}::${fillchar}${fillchar}${fillchar}${fillchar}::::${fillchar}::${fillchar}${fillchar}${fillchar}::${fillchar}${fillchar}${fillchar}:::${fillchar}${fillchar}`);
-addgridline(`${fillchar}${fillchar}${fillchar}:${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}::${fillchar}:${fillchar}:${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}:${fillchar}${fillchar}${fillchar}:${fillchar}:${fillchar}${fillchar}`);
+addgridline(`${fillchar}${fillchar}!!=${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}!=!${fillchar}${fillchar}!!=${fillchar}=!!${fillchar}${fillchar}${fillchar}`);
+addgridline(`${fillchar}${fillchar}=!=${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}!=!${fillchar}${fillchar}${fillchar}=!=${fillchar}${fillchar}!=!${fillchar}${fillchar}`);
+addgridline(`${fillchar}${fillchar}${fillchar}==${fillchar}${fillchar}${fillchar}${fillchar}====${fillchar}==${fillchar}${fillchar}${fillchar}==${fillchar}${fillchar}${fillchar}===${fillchar}${fillchar}`);
+addgridline(`${fillchar}${fillchar}${fillchar}=${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}==${fillchar}=${fillchar}=${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}=${fillchar}${fillchar}${fillchar}=${fillchar}=${fillchar}${fillchar}`);
 
 addgridline(`Terminte${fillchar}and${fillchar}Stay${fillchar}Resident`)        
 addgridline(`CarrierWave`);
@@ -100,13 +100,6 @@ function animate(){
 }
 animate();
 
-
-function addtexttoline(line, text){
-    for (let i = 0; i < text.length; i++){
-        grid[line].push(text[i]);
-    }
-    console.log(grid[line]);
-}
 
 function addgridline(text){
     grid.push([]);

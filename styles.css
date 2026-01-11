@@ -67,8 +67,8 @@ body, html {
 
 #computer{
     position: relative;
-    width: 95vw;
-    height: 90vh;
+    width: 100%;
+    height: 100%;
     border: 23px solid #000000;
     border-radius: 12px;
     background-color: #111;
