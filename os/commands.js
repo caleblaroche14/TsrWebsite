@@ -164,6 +164,7 @@ const commands = [
     description: "Launch audio player",
     boxWrap: false,
     execute(args){
+      toggleProgramVisual();
       AddTerminalLine("Launching audio player...");
       loadingdiv = document.getElementById("loading");
       playerdiv = document.getElementById("player");
@@ -203,6 +204,7 @@ const commands = [
           if (audioEl) audioEl.currentTime = 0;
         } else if (event.key.toLowerCase() === "q") {
           player.close();
+          toggleProgramVisual();
           if (audioEl) audioEl.currentTime = 0;
           playerdiv.classList.add("hidden");
         } else if (event.key.toLowerCase() === "n"){
@@ -251,7 +253,7 @@ const commands = [
     command: "IMGVIEW",
     description: "View image file (with file name)",
     boxWrap: false,
-    execute(args) {
+    execute(args) {      
       const imageDisplay = document.getElementById("image-display");
       const displayedImage = document.getElementById("displayed-image");
 
@@ -280,6 +282,7 @@ const commands = [
 
       displayedImage.src = fileNode.filepath;
       imageDisplay.classList.remove("hidden");
+      toggleProgramVisual();
 
       for (let i = 0; i < imgblocks.length; i++) {
         setTimeout(() => {
@@ -293,6 +296,7 @@ const commands = [
       // add an event listener to hide the image when "q" is pressed
       function hideImageOnQ(event) {
         if (event.key.toLowerCase() === 'q') {
+          toggleProgramVisual();
           imageDisplay.classList.add("hidden");
           displayedImage.src = '';
           removeEventListener('keydown', hideImageOnQ);
@@ -335,7 +339,7 @@ const commands = [
     }
   },
   {
-    command: "TXTVIEW",
+    command: "TYPE",
     description: "View text file (with file name)",
     boxWrap: false,
     execute(args) {
@@ -360,10 +364,12 @@ const commands = [
 
       displayedText.innerHTML = fileNode.content || 'No Text Available.';
       textDisplay.classList.remove("hidden");
+      toggleProgramVisual();
 
       // add an event listener to hide the text when "q" is pressed
       function hideTextOnQ(event) {
         if (event.key.toLowerCase() === 'q') {
+          toggleProgramVisual();
           textDisplay.classList.add("hidden");
           displayedText.textContent = '';
           removeEventListener('keydown', hideTextOnQ);
@@ -563,6 +569,7 @@ const player = {
   },
 
   play(index) {
+    if (this.renderFrameId) cancelAnimationFrame(this.renderFrameId);
     if (!this.audio) this.init();
     if (!this.audio) return;
     const target = (typeof index === 'number') ? index : (this.selectedSongIndex || 0);
@@ -607,9 +614,10 @@ const player = {
     // Start visualizer animation loop - DOS style
     const dataArray = new Uint8Array(this.analyser.frequencyBinCount);
     const visBars = document.getElementsByClassName('vis-bar');
+
     
     let lastUpdate = 0;
-    const updateInterval = 100; // Update every 100ms (10fps) - DOS style
+    const updateInterval = 10; // Update every 100ms (10fps) - DOS style
 
     const renderFrame = (timestamp) => {
       this.renderFrameId = requestAnimationFrame(renderFrame);
@@ -633,7 +641,7 @@ const player = {
         scale = Math.floor(scale * 8) / 8;
         
         visBars[i].style.height = `${scale * 100}%`;
-        visBars[i].style.backgroundColor = '#AAAAAA';
+        visBars[i].style.backgroundColor = `rgb(${scale * 255}, ${scale * 50}, ${255 - (scale * 100)})`;
       }
     };
     renderFrame();
@@ -641,6 +649,7 @@ const player = {
 
   pause() {
     if (!this.audio) return;
+    if (this.timeInterval) clearInterval(this.timeInterval);
     try { this.currentSongTime = this.audio.currentTime || 0; } catch (e) { this.currentSongTime = 0; }
     this.audio.pause();
     this.paused = true;
@@ -661,7 +670,7 @@ const player = {
   },
 
   prev() {
-    if (this.selectedSongIndex - 1 > 0) {
+    if (this.selectedSongIndex - 1 >= 0) {
       this.pause();
       this.changeSelectedSong(this.selectedSongIndex - 1);
       this.play();
@@ -726,6 +735,8 @@ const player = {
 
   close() {
     this.pause();
+    if (this.renderFrameId) cancelAnimationFrame(this.renderFrameId);
+    if (this.timeInterval) clearInterval(this.timeInterval);
     if (this.keyHandler) { removeEventListener('keydown', this.keyHandler); this.keyHandler = null; }
     this.audio.src = '';
     this.currentIndex = null;
@@ -740,3 +751,7 @@ const player = {
     input.value = '';
   }
 };
+
+function ClickKey(key){
+  window.dispatchEvent(new KeyboardEvent('keydown', {'key': key}));
+}

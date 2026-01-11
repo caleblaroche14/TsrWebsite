@@ -10,6 +10,13 @@ IDEAS:
         - have a way to inspect it so that cambria tries to talk to you once you've interacted with it 
 
 PLAYER:
+
+
+DOS:
+
+GENERAL:
+    - zoom in on computer when clicked for effect (same for tape)
+    - zoom in on album cover for effect? 
    
    
     
@@ -29,3 +36,8 @@ x - better cursor
 x - Do power button once again
 x - provide alternate path with links (poster on wall?)
 x - Email List Command
+x - colored visualizer
+x - clickable commands on player
+x - crashing? 
+x - hide command line when player opens
+x - TYPE instead of TXTVIEW

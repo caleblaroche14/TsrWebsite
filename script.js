@@ -4,7 +4,11 @@ var programActive = false;
 var commandHistory = [];
 var commandIdx = -1;
 var volume = 0.7; // default volume at 70%
-let room = document.getElementById("room");
+const room = document.getElementById("room");
+const terminal = document.getElementById('terminal');
+const terminalinput = document.getElementById('text-input');
+
+
 // setup init page 
 
 
@@ -198,4 +202,10 @@ function SetupVolume(){
         }
     }
     
+}
+
+function toggleProgramVisual(){
+    programActive = !programActive;
+    terminal.classList.toggle("hidden");
+    terminalinput.classList.toggle("noinput");
 }

@@ -10,30 +10,43 @@ var gridheight = screenHeight / 35;
 var fillchar = '.' 
 var targetFps = 5;
 var lastFrameTime = 0; 
+addgridline(`#######${fillchar}${fillchar}${fillchar}######${fillchar}${fillchar}${fillchar}#######${fillchar}${fillchar}${fillchar}`);
+addgridline(`#######${fillchar}${fillchar}#######${fillchar}${fillchar}${fillchar}########${fillchar}${fillchar}`);
+addgridline(`${fillchar}${fillchar}##!${fillchar}${fillchar}${fillchar}${fillchar}!##${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}##!${fillchar}${fillchar}###${fillchar}${fillchar}`);
+addgridline(`${fillchar}${fillchar}!#!${fillchar}${fillchar}${fillchar}${fillchar}!#!${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}!#!${fillchar}${fillchar}#!#${fillchar}${fillchar}`);
+addgridline(`${fillchar}${fillchar}#!!${fillchar}${fillchar}${fillchar}${fillchar}!!##!!${fillchar}${fillchar}${fillchar}${fillchar}#!#!!#!${fillchar}${fillchar}${fillchar}`);
+addgridline(`${fillchar}${fillchar}!!!${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}!!#!!!${fillchar}${fillchar}${fillchar}!!#!#!${fillchar}${fillchar}${fillchar}${fillchar}`);
+addgridline(`${fillchar}${fillchar}!!:${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}!:!${fillchar}${fillchar}!!:${fillchar}:!!${fillchar}${fillchar}${fillchar}`);
+addgridline(`${fillchar}${fillchar}:!:${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}!:!${fillchar}${fillchar}${fillchar}:!:${fillchar}${fillchar}!:!${fillchar}${fillchar}`);
+addgridline(`${fillchar}${fillchar}${fillchar}::${fillchar}${fillchar}${fillchar}${fillchar}::::${fillchar}::${fillchar}${fillchar}${fillchar}::${fillchar}${fillchar}${fillchar}:::${fillchar}${fillchar}`);
+addgridline(`${fillchar}${fillchar}${fillchar}:${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}::${fillchar}:${fillchar}:${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}:${fillchar}${fillchar}${fillchar}:${fillchar}:${fillchar}${fillchar}`);
+
 addgridline(`Terminte${fillchar}and${fillchar}Stay${fillchar}Resident`)        
-addgridline('CarrierWave');
+addgridline(`CarrierWave`);
 addgridline('Engage');
-addgridline('Skyline');
+addgridline(`${fillchar}${fillchar}${fillchar}${fillchar}Skyline`);
 addgridline(`Light${fillchar}Speed`);
 addgridline('June');
-addgridline(`Ride${fillchar}Scratch`);
+addgridline(`Ride`);
 addgridline(`Letting${fillchar}Go`);
 addgridline(`Cambria`);
+addgridline(`CAN${fillchar}YOU${fillchar}HEAR${fillchar}ME?`);         
 addgridline(`Waiting`);
 addgridline(`Dreaming`);
 addgridline(`Two${fillchar}Three`);
 addgridline(`Stray`);
 addgridline(`Locked${fillchar}In`);
-addgridline(`Transmission`);
+addgridline(`send${fillchar}${fillchar}me${fillchar}${fillchar}${fillchar}another${fillchar}Transmission`);
 addgridline(`In${fillchar}The${fillchar}Night`);
 addgridline(`Encounter`);
-               
-                             
-                                                                                
+addgridline(`this${fillchar}time${fillchar}ill${fillchar}listen`);                 
+
+                                        
+                                                                                                          
                                    
                                    
 var opacity = 1;                                                    
-for (let i = 0; i < gridheight; i++){
+for (let i = 0; i < grid.length; i++){
     // add div 
     let div = document.createElement("div");
     div.id = 'row'+i;
@@ -51,14 +64,29 @@ for (let i = 0; i < gridheight; i++){
     div.innerHTML = grid[i].join('');
 }
 
+var verticalCounter = 0;
+var verticalInterval = 5; 
+
 function updateascii(){
-    for (let l = 0; l < gridlines.length; l++){
+    verticalCounter++;
+    
+    if (verticalCounter % verticalInterval === 0){
+        let lastRow = grid[grid.length - 1];
+        for (let i = grid.length - 1; i > 0; i--){
+            grid[i] = grid[i - 1];
+        }
+        grid[0] = lastRow;
+    }
+    for (let l = 0; l < grid.length; l++){
         let lastChar = grid[l][grid[l].length - 1];
         for (let c = grid[l].length - 1; c > 0; c--){
             grid[l][c] = grid[l][c - 1];
         }
         grid[l][0] = lastChar;
-        gridlines[l].innerHTML = grid[l].join('');
+    }
+
+    for (let i = 0; i < gridlines.length; i++){
+        gridlines[i].innerHTML = grid[i].join('');
     }
 }
 
@@ -82,9 +110,9 @@ function addtexttoline(line, text){
 
 function addgridline(text){
     grid.push([]);
-
+    
     let startidx = getRandomInt(0,gridlength) - text.length;
-    if (startidx < 0){
+    if (startidx < 0 || grid.length < 11){
         startidx = 0;
     }
     for (let j = 0; j < startidx; j++){
