@@ -3,13 +3,29 @@ const asciiContainer = document.getElementById("ascii");
 var screenWidth = window.innerWidth;
 var screenHeight = window.innerHeight;
 var grid = [];
-var gridlines = [];
 
 var gridlength = screenWidth / 11;
 var gridheight = screenHeight / 35;
 var fillchar = '.' 
 var targetFps = 5;
-var lastFrameTime = 0; 
+var lastFrameTime = 0;
+
+// Canvas setup
+const canvas = document.createElement('canvas');
+canvas.classList.add('ascii');
+canvas.width = screenWidth;
+canvas.height = screenHeight;
+canvas.style.display = 'block';
+canvas.style.position = 'absolute';
+canvas.style.top = '0';
+canvas.style.left = '0';
+canvas.style.pointerEvents = 'none';
+asciiContainer.appendChild(canvas);
+const ctx = canvas.getContext('2d');
+ctx.font = '20px DOS, monospace';
+ctx.fillStyle = 'rgba(255, 255, 255, 0.181)';
+const charWidth = 12;
+const charHeight = 20; 
 addgridline(`#######${fillchar}${fillchar}${fillchar}######${fillchar}${fillchar}${fillchar}#######${fillchar}${fillchar}${fillchar}`);
 addgridline(`#######${fillchar}${fillchar}#######${fillchar}${fillchar}${fillchar}########${fillchar}${fillchar}`);
 addgridline(`${fillchar}${fillchar}##!${fillchar}${fillchar}${fillchar}${fillchar}!##${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}${fillchar}##!${fillchar}${fillchar}###${fillchar}${fillchar}`);
@@ -41,31 +57,32 @@ addgridline(`In${fillchar}The${fillchar}Night`);
 addgridline(`Encounter`);
 addgridline(`this${fillchar}time${fillchar}ill${fillchar}listen`);                 
 
-                                        
-                                                                                                          
-                                   
-                                   
-var opacity = 1;                                                    
+// Initialize grid rows
 for (let i = 0; i < grid.length; i++){
-    // add div 
-    let div = document.createElement("div");
-    div.id = 'row'+i;
-    div.className = 'asciirow';
-    div.style.opacity = opacity;
-    opacity -= 0.03;
-    gridlines.push(div);
-    asciiContainer.appendChild(div);
-
     if (grid[i] === undefined){ grid.push([]); }
     
     while (grid[i].length < gridlength) {
         grid[i].push(fillchar);
     }
-    div.innerHTML = grid[i].join('');
 }
 
 var verticalCounter = 0;
 var verticalInterval = 5; 
+
+function drawAscii(){
+    // Clear canvas with dark blue background
+    ctx.fillStyle = '#000060';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw grid on canvas with fading opacity
+    let opacity = 1;
+    for (let i = 0; i < grid.length; i++){
+        const text = grid[i].join('');
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.181 * opacity})`;
+        ctx.fillText(text, 0, (i + 1) * charHeight);
+        opacity -= 0.03;
+    }
+}
 
 function updateascii(){
     verticalCounter++;
@@ -84,17 +101,16 @@ function updateascii(){
         }
         grid[l][0] = lastChar;
     }
-
-    for (let i = 0; i < gridlines.length; i++){
-        gridlines[i].innerHTML = grid[i].join('');
-    }
 }
 
 function animate(){
     let currentTime = performance.now();
     if (currentTime - lastFrameTime >= (1000 / targetFps)) {
-        if (!computerOn){updateascii();}
-        lastFrameTime = currentTime;
+        if (!computerOn){
+            updateascii();
+            drawAscii();
+            lastFrameTime = currentTime;
+        }
     }
     requestAnimationFrame(animate);
 }
