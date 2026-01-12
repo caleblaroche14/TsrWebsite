@@ -41,3 +41,11 @@ x - clickable commands on player
 x - crashing? 
 x - hide command line when player opens
 x - TYPE instead of TXTVIEW
+
+
+
+-- GEAR LIST 
+
+- Roland Juno-106
+- Ensoniq ESQ-1
+- 

@@ -300,6 +300,10 @@ const commands = [
           imageDisplay.classList.add("hidden");
           displayedImage.src = '';
           removeEventListener('keydown', hideImageOnQ);
+          // focus on text-input
+          var inputBox = document.getElementById("text-input");
+          inputBox.focus();
+          inputBox.select();
         }
       }
       addEventListener('keydown', hideImageOnQ);
@@ -373,6 +377,9 @@ const commands = [
           textDisplay.classList.add("hidden");
           displayedText.textContent = '';
           removeEventListener('keydown', hideTextOnQ);
+          var inputBox = document.getElementById("text-input");
+          inputBox.focus();
+          inputBox.select();
         }
       }
       addEventListener('keydown', hideTextOnQ);
@@ -412,6 +419,9 @@ const commands = [
           scandisplay.classList.add("hidden");
           scanlog.innerHTML = '';
           removeEventListener('keydown', hideScanOnQ);
+          var inputBox = document.getElementById("text-input");
+          inputBox.focus();
+          inputBox.select();
         }
       }
       addEventListener('keydown', hideScanOnQ);

@@ -93,7 +93,7 @@ function updateascii(){
 function animate(){
     let currentTime = performance.now();
     if (currentTime - lastFrameTime >= (1000 / targetFps)) {
-        updateascii();
+        if (!computerOn){updateascii();}
         lastFrameTime = currentTime;
     }
     requestAnimationFrame(animate);

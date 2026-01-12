@@ -1,6 +1,7 @@
 
 var dir = "C:";
 var programActive = false;
+var computerOn = false;
 var commandHistory = [];
 var commandIdx = -1;
 var volume = 0.7; // default volume at 70%
@@ -121,10 +122,7 @@ function BootSequence(){
     setTimeout(()=> {AddTerminalLine("  | |  ___) |  _ < ");}, 1440);
     setTimeout(()=> {AddTerminalLine("  |_| |____/|_| \\_\\");}, 1534);
 }
-// setTimeout(() => { RunCommand("player"); }, 2000);
-//setTimeout(() => { RunCommand("cd albums"); }, 2010);
-//setTimeout(() => { RunCommand("cd carrierwave"); },2020); 
-//setTimeout(() => { RunCommand("txtview ABOUT.txt"); }, 2030);
+
 
 // add eventlistener for input on up arrow that fills the input with the last command
 commandInput.addEventListener('keydown', (e) => {
@@ -149,6 +147,7 @@ commandInput.addEventListener('keydown', (e) => {
 });
 
 function StartComputer(){
+    computerOn = true;
     let computer = document.getElementById("computer");
     computer.classList.remove("hidden");
     programActive = true;
@@ -163,6 +162,7 @@ function StartComputer(){
 }
 
 function ShutDownComputer(){
+    computerOn = false;
     let computer = document.getElementById("computer");
     computer.classList.add("hidden");
     programActive = false;
@@ -174,10 +174,8 @@ function ShutDownComputer(){
 }
 
 function OpenPlayerOnly(){
-    let computer = document.getElementById("computer");
-    computer.classList.remove("hidden");
-    programActive = true;
-    RunCommand("player");
+    StartComputer();
+    setTimeout(()=>{RunCommand("PLAYER");},1600);
     SetupVolume();
 }
 
