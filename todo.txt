@@ -13,6 +13,7 @@ PLAYER:
 
 
 DOS:
+    - ESC key quits
 
 GENERAL:
     - zoom in on computer when clicked for effect (same for tape)

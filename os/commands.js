@@ -347,8 +347,6 @@ const commands = [
     description: "View text file (with file name)",
     boxWrap: false,
     execute(args) {
-      const textDisplay = document.getElementById("text-display");
-      const displayedText = document.getElementById("displayed-text");
 
       if (!args || args.length === 0) return "Please specify a text file name.";
 
@@ -366,25 +364,10 @@ const commands = [
 
       if (!fileNode.content) return `${target} has no viewable text content.`;
 
-      displayedText.innerHTML = fileNode.content || 'No Text Available.';
-      textDisplay.classList.remove("hidden");
-      toggleProgramVisual();
+      AddTerminalLine(fileNode.textContent || fileNode.content || '');
+      
 
-      // add an event listener to hide the text when "q" is pressed
-      function hideTextOnQ(event) {
-        if (event.key.toLowerCase() === 'q') {
-          toggleProgramVisual();
-          textDisplay.classList.add("hidden");
-          displayedText.textContent = '';
-          removeEventListener('keydown', hideTextOnQ);
-          var inputBox = document.getElementById("text-input");
-          inputBox.focus();
-          inputBox.select();
-        }
-      }
-      addEventListener('keydown', hideTextOnQ);
-
-      return `Displaying text file: ${target}`;
+      return;
     }
   },
   {
