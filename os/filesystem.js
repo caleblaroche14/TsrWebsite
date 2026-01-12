@@ -126,6 +126,18 @@ const filesystem =
                             "DIALLOG.TXT": { "id": "C:/LOGS/DIALLOG.TXT", "type": "file", "content": "Dialed BBS at 23:59 - success" }
                         }
                     },
+                    "PHOTOS": {
+                        "id": "C:/PHOTOS",
+                        "type": "directory",
+                        "children": {
+                            "STUDIO1.GIF": { "id": "C:/PHOTOS/STUDIO1.GIF", "type": "file", "tags": ["photo"], "content": "binary image data", "filepath": "/assets/images/studio1.gif"
+                                    },
+                            "TASCAM.GIF": { "id": "C:/PHOTOS/TASCAM.GIF", "type": "file", "tags": ["photo"], "content": "binary image data", "filepath": "/assets/images/tascam.gif"
+                                    },
+                             "JUNO.GIF": { "id": "C:/PHOTOS/JUNO.GIF", "type": "file", "tags": ["photo"], "content": "binary image data", "filepath": "/assets/images/juno.gif"
+                                    },
+                        }
+                    },
                     "FLOPPY": {
                         "id": "C:/FLOPPY",
                         "type": "directory",
