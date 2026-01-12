@@ -300,10 +300,11 @@ const commands = [
           imageDisplay.classList.add("hidden");
           displayedImage.src = '';
           removeEventListener('keydown', hideImageOnQ);
-          // focus on text-input
-          var inputBox = document.getElementById("text-input");
-          inputBox.focus();
-          inputBox.select();
+          setTimeout(() => {
+            var inputBox = document.getElementById("text-input");
+            inputBox.focus();
+            inputBox.select();
+          }, 10);
         }
       }
       addEventListener('keydown', hideImageOnQ);
@@ -739,12 +740,73 @@ const player = {
     document.getElementById("player").classList.add("hidden");
     document.getElementById("terminal-window").classList.remove("hidden");
     programActive = false;
-    let input = document.getElementById('text-input');
-    input.focus()
-    input.value = '';
+    setTimeout(() => {
+      let input = document.getElementById('text-input');
+      input.focus();
+      input.select();
+      input.value = '';
+    }, 10);
   }
 };
 
 function ClickKey(key){
   window.dispatchEvent(new KeyboardEvent('keydown', {'key': key}));
 }
+
+// Global ESC key handler to exit programs (DOS-style)
+addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    const playerDiv = document.getElementById('player');
+    const imageDisplay = document.getElementById('image-display');
+    const textDisplay = document.getElementById('text-display');
+    const scanDisplay = document.getElementById('scan-display');
+    
+    // Close player if open
+    if (playerDiv && !playerDiv.classList.contains('hidden')) {
+      player.close();
+      toggleProgramVisual();
+      return;
+    }
+    
+    // Close image viewer if open
+    if (imageDisplay && !imageDisplay.classList.contains('hidden')) {
+      toggleProgramVisual();
+      imageDisplay.classList.add('hidden');
+      const displayedImage = document.getElementById('displayed-image');
+      displayedImage.src = '';
+      setTimeout(() => {
+        const inputBox = document.getElementById('text-input');
+        inputBox.focus();
+        inputBox.select();
+      }, 10);
+      return;
+    }
+    
+    // Close text viewer if open
+    if (textDisplay && !textDisplay.classList.contains('hidden')) {
+      toggleProgramVisual();
+      textDisplay.classList.add('hidden');
+      const displayedText = document.getElementById('displayed-text');
+      displayedText.textContent = '';
+      setTimeout(() => {
+        const inputBox = document.getElementById('text-input');
+        inputBox.focus();
+        inputBox.select();
+      }, 10);
+      return;
+    }
+    
+    // Close scan display if open
+    if (scanDisplay && !scanDisplay.classList.contains('hidden')) {
+      scanDisplay.classList.add('hidden');
+      const scanLog = document.getElementById('scan-log');
+      scanLog.innerHTML = '';
+      setTimeout(() => {
+        const inputBox = document.getElementById('text-input');
+        inputBox.focus();
+        inputBox.select();
+      }, 10);
+      return;
+    }
+  }
+});

@@ -13,7 +13,7 @@ PLAYER:
 
 
 DOS:
-    - ESC key quits
+   
 
 GENERAL:
     - zoom in on computer when clicked for effect (same for tape)
@@ -42,11 +42,10 @@ x - clickable commands on player
 x - crashing? 
 x - hide command line when player opens
 x - TYPE instead of TXTVIEW
-
+x - ESC key quits
 
 
 -- GEAR LIST 
 
 - Roland Juno-106
 - Ensoniq ESQ-1
-- 

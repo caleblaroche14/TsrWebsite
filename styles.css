@@ -69,8 +69,6 @@ body, html {
     position: relative;
     width: 100%;
     height: 100%;
-    border: 5px solid #000000;
-    border-radius: 12px;
     background-color: #111;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     overflow: hidden;
@@ -152,6 +150,8 @@ body, html {
     display: flex;
     align-items: flex-end;
     box-sizing: border-box;
+    padding-left: 5px;
+    padding-bottom: 5px;
 }
 
 .terminal-line{
@@ -208,7 +208,6 @@ body, html {
     radial-gradient(ellipse at center, transparent 0%, transparent 60%, rgba(0, 0, 0, 0.4) 100%);
     pointer-events: none;
     z-index: 10;
-    border-radius: 8px;
 }
 
 /* Subtle screen flicker */
@@ -224,7 +223,6 @@ body, html {
     pointer-events: none;
     z-index: 11;
     animation: flicker 1.75s infinite;
-    border-radius: 8px;
 }
 
 @keyframes flicker {
@@ -404,6 +402,7 @@ body, html {
 
 .hidden{
     display: none !important;
+    opacity: 0;
 }
 
 
@@ -679,4 +678,49 @@ body, html {
         padding: 3px;
         font-size: 12px;
     }
+}
+
+
+.zoomoncomputer{
+    animation: zoomcomputer 2s forwards;
+}
+
+@keyframes zoomcomputer {
+    0% {
+
+    }
+    100% {
+        transform: translate(100%, -80%) scale(15.5);
+    }
+}
+
+/* Mobile zoom animation with smaller scale */
+@media (max-width: 768px) {
+    @keyframes zoomcomputer {
+        0% {
+
+        }
+        100% {
+            transform: translate(300%, 500%) scale(15.5);
+        }
+    }
+}
+
+.hiddenFast{
+    opacity: 0;
+}
+
+.nothiddenSlow{
+    opacity: 1 !important;
+    transition: 2s ease-out;
+}
+
+#blackdiv{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    pointer-events: none;
 }

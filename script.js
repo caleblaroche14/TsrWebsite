@@ -8,6 +8,7 @@ var volume = 0.7; // default volume at 70%
 const room = document.getElementById("room");
 const terminal = document.getElementById('terminal');
 const terminalinput = document.getElementById('text-input');
+const blackdiv = document.getElementById('blackdiv');
 
 
 // setup init page 
@@ -147,18 +148,28 @@ commandInput.addEventListener('keydown', (e) => {
 });
 
 function StartComputer(){
-    computerOn = true;
-    let computer = document.getElementById("computer");
-    computer.classList.remove("hidden");
-    programActive = true;
-    BootSequence();
-    SetupVolume();
-
-    // focus the input box after boot sequence
+    ShowBlackDiv();
+    ZoomOnComputer();
     setTimeout(() => {
-        const inputBox = document.getElementById("text-input");
-        inputBox.focus();
-    }, 100);
+        computerOn = true;
+        let computer = document.getElementById("computer");
+        computer.classList.remove("hidden");
+        programActive = true;
+        BootSequence();
+        SetupVolume();
+
+        // focus the input box after boot sequence
+        setTimeout(() => {
+            const inputBox = document.getElementById("text-input");
+            inputBox.focus();
+
+        }, 100);
+
+        
+    }, 2000);
+
+
+
 }
 
 function ShutDownComputer(){
@@ -171,11 +182,13 @@ function ShutDownComputer(){
     dir = "C:";
     commandHistory = [];
     commandIdx = -1;
+    ZoomOffComputer();
+    HideBlackDiv();
 }
 
 function OpenPlayerOnly(){
     StartComputer();
-    setTimeout(()=>{RunCommand("PLAYER");},1600);
+    setTimeout(()=>{RunCommand("PLAYER");},5000);
     SetupVolume();
 }
 
@@ -206,4 +219,22 @@ function toggleProgramVisual(){
     programActive = !programActive;
     terminal.classList.toggle("hidden");
     terminalinput.classList.toggle("noinput");
+}
+
+function ZoomOnComputer(){
+    document.getElementById("room").classList.add("zoomoncomputer");
+}
+
+function ZoomOffComputer(){
+    document.getElementById("room").classList.remove("zoomoncomputer");
+}
+
+function ShowBlackDiv(){
+    blackdiv.classList.add("nothiddenSlow");
+    blackdiv.classList.remove("hiddenFast");
+}
+
+function HideBlackDiv(){
+    blackdiv.classList.remove("nothiddenSlow");
+    blackdiv.classList.add("hiddenFast");
 }
