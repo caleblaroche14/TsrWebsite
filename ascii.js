@@ -84,6 +84,7 @@ function drawAscii(){
     }
 }
 
+
 function updateascii(){
     verticalCounter++;
     

@@ -16,8 +16,7 @@ DOS:
    
 
 GENERAL:
-    - zoom in on computer when clicked for effect (same for tape)
-    - zoom in on album cover for effect? 
+
    
    
     
@@ -43,7 +42,8 @@ x - crashing?
 x - hide command line when player opens
 x - TYPE instead of TXTVIEW
 x - ESC key quits
-
+x - zoom in on computer when clicked for effect (same for tape)
+n - zoom in on album cover for effect? 
 
 -- GEAR LIST 
 
