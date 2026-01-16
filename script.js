@@ -148,27 +148,28 @@ commandInput.addEventListener('keydown', (e) => {
 });
 
 function StartComputer(){
-    ShowBlackDiv();
-    ZoomOnComputer();
-    setTimeout(() => {
-        computerOn = true;
-        let computer = document.getElementById("computer");
-        computer.classList.remove("hidden");
-        programActive = true;
-        BootSequence();
-        SetupVolume();
-
-        // focus the input box after boot sequence
+    
+    if (!computerOn){{
+        ShowBlackDiv();
+        ZoomOnComputer();
         setTimeout(() => {
-            const inputBox = document.getElementById("text-input");
-            inputBox.focus();
+            let computer = document.getElementById("computer");
+            computer.classList.remove("hidden");
+            BootSequence();
+            SetupVolume();
+            programActive = true;
+            // focus the input box after boot sequence
+            setTimeout(() => {
+                const inputBox = document.getElementById("text-input");
+                inputBox.focus();
 
-        }, 100);
+            }, 100);
+            
+        }, 2000);
+    };}
+    
 
-        
-    }, 2000);
-
-
+    computerOn = true;
 
 }
 
